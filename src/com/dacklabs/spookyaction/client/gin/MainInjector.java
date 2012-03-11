@@ -6,5 +6,6 @@ import com.google.gwt.inject.client.Ginjector;
 
 @GinModules(MainModule.class)
 public interface MainInjector extends Ginjector {
+
 	SpookyActionView getMainView();
 }
