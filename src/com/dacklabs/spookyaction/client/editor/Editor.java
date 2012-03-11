@@ -14,6 +14,8 @@ public class Editor implements IsWidget {
 	@ImplementedBy(EditorView.class)
 	public interface Display extends IsWidget {
 
+		void updateStatus(String status);
+
 		void replaceContent(String content);
 	}
 

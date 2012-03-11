@@ -1,6 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:editor="urn:import:com.dacklabs.spookyaction.client.editor">
 	<ui:style>
 		.editor {
 			bottom: 5px;
@@ -9,16 +10,9 @@
 			right: 5px;
 			top: 50px;
 		}
-		
-		.editor-text {
-			bottom: 0px;
-			left: 0px;
-			position: absolute;
-			right: 0px;
-			top: 0px;
-		}
 	</ui:style>
-	<g:HTMLPanel styleName="{style.editor}">
-		<g:TextArea ui:field="fileContents" styleName="{style.editor-text}" />
-	</g:HTMLPanel>
+	<g:FlowPanel styleName="{style.editor}">
+		<g:Label ui:field="status" />
+		<editor:EditorArea ui:field="editorArea" />
+	</g:FlowPanel>
 </ui:UiBinder> 
