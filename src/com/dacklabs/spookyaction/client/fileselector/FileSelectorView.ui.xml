@@ -1,0 +1,12 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+		
+	</ui:style>
+	<g:HTMLPanel>
+		<input type="text" ui:field="pathSelector" />
+		<g:Button text="Edit" ui:field="submitButton"/>
+		<span ui:field="loadingText" style="display:none">Loading files...</span>
+	</g:HTMLPanel>
+</ui:UiBinder> 

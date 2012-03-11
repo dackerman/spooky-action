@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to='spooky_action'>
+  <inherits name='com.google.gwt.user.User'/>
+  
+  <entry-point class='com.dacklabs.spookyaction.client.main.Main'/>
+  
+  <inherits name="com.google.gwt.inject.Inject"/>
+  
+  <source path='client'/>
+  <source path='shared'/>
+</module>
