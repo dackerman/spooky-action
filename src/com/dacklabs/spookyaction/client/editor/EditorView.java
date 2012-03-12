@@ -4,10 +4,14 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 
+/**
+ * View for the main editor window, showing the current status and the editor area itself.
+ * 
+ * @author "David Ackerman (david.w.ackerman@gmail.com)"
+ */
 public class EditorView extends Composite implements Editor.Display {
 
 	private static EditorViewUiBinder uiBinder = GWT.create(EditorViewUiBinder.class);
@@ -16,22 +20,18 @@ public class EditorView extends Composite implements Editor.Display {
 	}
 
 	@UiField(provided = true) EditorArea editorArea;
-	@UiField Label status;
+	@UiField(provided = true) CommandStatus status;
 
 	@Inject
-	public EditorView(EditorArea editorArea) {
+	public EditorView(EditorArea editorArea, CommandStatus status) {
 		this.editorArea = editorArea;
+		this.status = status;
 
 		initWidget(uiBinder.createAndBindUi(this));
 	}
 
 	@Override
-	public void replaceContent(String content) {
+	public void setEditorContent(String content) {
 		editorArea.setText(content);
-	}
-
-	@Override
-	public void updateStatus(String statusString) {
-		status.setText(statusString);
 	}
 }

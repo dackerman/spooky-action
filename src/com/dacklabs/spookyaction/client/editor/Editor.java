@@ -9,14 +9,18 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.ImplementedBy;
 import com.google.inject.Inject;
 
+/**
+ * The main editor window. Displays the file in a text area and then listens for events on it to
+ * send back changes to the server.
+ * 
+ * @author "David Ackerman (david.w.ackerman@gmail.com)"
+ */
 public class Editor implements IsWidget {
 
 	@ImplementedBy(EditorView.class)
 	public interface Display extends IsWidget {
 
-		void updateStatus(String status);
-
-		void replaceContent(String content);
+		void setEditorContent(String content);
 	}
 
 	private final Display display;
@@ -32,7 +36,7 @@ public class Editor implements IsWidget {
 
 		@Override
 		public void onFileRecieved(File file) {
-			display.replaceContent(file.getContent());
+			display.setEditorContent(file.getContent());
 		}
 	}
 

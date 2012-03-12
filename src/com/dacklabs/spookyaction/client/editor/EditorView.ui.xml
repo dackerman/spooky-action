@@ -10,9 +10,17 @@
 			right: 5px;
 			top: 50px;
 		}
+		
+		.editor-txt {
+			bottom: 0px;
+			left: 0px;
+			position: absolute;
+			right: 0px;
+			top: 200px;
+		}
 	</ui:style>
 	<g:FlowPanel styleName="{style.editor}">
-		<g:Label ui:field="status" />
-		<editor:EditorArea ui:field="editorArea" />
+		<editor:CommandStatus ui:field="status" />
+		<editor:EditorArea ui:field="editorArea" styleName="{style.editor-txt}" />
 	</g:FlowPanel>
 </ui:UiBinder> 
