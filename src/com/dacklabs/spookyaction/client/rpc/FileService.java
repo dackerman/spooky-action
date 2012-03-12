@@ -3,6 +3,7 @@ package com.dacklabs.spookyaction.client.rpc;
 import java.util.ArrayList;
 
 import com.dacklabs.spookyaction.shared.Command;
+import com.dacklabs.spookyaction.shared.Diff;
 import com.dacklabs.spookyaction.shared.File;
 import com.dacklabs.spookyaction.shared.FileUnavailableException;
 import com.dacklabs.spookyaction.shared.UpdateResult;
@@ -15,4 +16,6 @@ public interface FileService extends RemoteService {
 	File fromPath(String path) throws FileUnavailableException;
 
 	UpdateResult updateFile(File file, ArrayList<Command> commands) throws FileUnavailableException;
+
+    UpdateResult updateFileWithDiff(Diff diff) throws FileUnavailableException;
 }

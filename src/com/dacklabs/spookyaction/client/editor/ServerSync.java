@@ -13,17 +13,17 @@ import com.google.inject.Inject;
  * 
  * @author "David Ackerman (david.w.ackerman@gmail.com)"
  */
-public class CommandSync implements OpenFileEventHandler {
+public class ServerSync implements OpenFileEventHandler {
 
 	private static final int SYNC_TIMEOUT = 1000;
 
-	private final SyncWithServer syncWithServer;
+    private final SyncWithServer syncWithServer;
 	private final Scheduler scheduler;
 
 	private SyncWithServerTask currentSyncingTask = null;
 
 	@Inject
-	CommandSync(SyncWithServer syncWithServer, EventBus eventBus, Scheduler scheduler) {
+    ServerSync(SyncWithServer syncWithServer, EventBus eventBus, Scheduler scheduler) {
 		this.syncWithServer = syncWithServer;
 		this.scheduler = scheduler;
 
@@ -45,12 +45,12 @@ public class CommandSync implements OpenFileEventHandler {
 
 	private static class SyncWithServerTask implements RepeatingCommand {
 
-		private final SyncWithServer syncWithServer;
+        private final SyncWithServer syncWithServer;
 		private final File currentFile;
 
 		private boolean shouldSync = true;
 
-		public SyncWithServerTask(File currentFile, SyncWithServer syncWithServer) {
+        public SyncWithServerTask(File currentFile, SyncWithServer syncWithServer) {
 			this.currentFile = currentFile;
 			this.syncWithServer = syncWithServer;
 		}

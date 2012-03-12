@@ -20,7 +20,8 @@
 		}
 	</ui:style>
 	<g:FlowPanel styleName="{style.editor}">
-		<editor:CommandStatus ui:field="status" />
-		<editor:EditorArea ui:field="editorArea" styleName="{style.editor-txt}" />
+		<g:Button ui:field="saveButton" />
+		<editor:CurrentDiffView ui:field="currentDiff" />
+		<g:TextArea ui:field="editorArea" styleName="{style.editor-txt}" />
 	</g:FlowPanel>
 </ui:UiBinder> 
