@@ -1,16 +1,29 @@
 package com.dacklabs.spookyaction.client.command;
 
+import com.dacklabs.spookyaction.client.editor.HasCursor;
 import com.dacklabs.spookyaction.shared.Command;
 import com.dacklabs.spookyaction.shared.Command.CommandType;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
-import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.shared.EventBus;
+import com.google.inject.Inject;
 
-public class KeyToCommandConverter implements KeyPressHandler {
+/**
+ * Converts User keystrokes into {@link Command} objects for syncing with the server.
+ * 
+ * @author "David Ackerman (david.w.ackerman@gmail.com)"
+ */
+public class KeyToCommandConverter implements KeyPressHandler, KeyUpHandler {
 
-	private final SimpleEventBus eventBus;
+	private final EventBus eventBus;
+	private final HasCursor hasCursor;
 
-	public KeyToCommandConverter(SimpleEventBus eventBus) {
+	@Inject
+	public KeyToCommandConverter(HasCursor hasCursor, EventBus eventBus) {
+		this.hasCursor = hasCursor;
 		this.eventBus = eventBus;
 	}
 
@@ -21,8 +34,26 @@ public class KeyToCommandConverter implements KeyPressHandler {
 		Command.Builder builder = Command.builder();
 		builder.ofType(CommandType.KEY);
 		builder.repeatedTimes(1);
-		builder.withOffset(0);
+		builder.withOffset(hasCursor.getCursorLocation());
 		builder.withData(String.valueOf(charCode));
+
+		eventBus.fireEvent(new CommandEvent(builder.build()));
+	}
+
+	@Override
+	public void onKeyUp(KeyUpEvent event) {
+		Command.Builder builder = Command.builder();
+		builder.withOffset(hasCursor.getCursorLocation());
+
+		switch (event.getNativeKeyCode()) {
+
+		case KeyCodes.KEY_BACKSPACE:
+			builder.ofType(CommandType.BACKSPACE);
+			break;
+
+		default:
+			return;
+		}
 
 		eventBus.fireEvent(new CommandEvent(builder.build()));
 	}

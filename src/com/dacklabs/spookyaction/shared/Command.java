@@ -133,6 +133,16 @@ public class Command implements IsSerializable {
 
 	@Override
 	public String toString() {
-		return String.format("Command [offset=%s, type=%s, data=%s, repeated=%s]", offset, type, data, repeated);
+		StringBuilder builder2 = new StringBuilder();
+		builder2.append("Command [offset=");
+		builder2.append(offset);
+		builder2.append(", type=");
+		builder2.append(type);
+		builder2.append(", data=");
+		builder2.append(data);
+		builder2.append(", repeated=");
+		builder2.append(repeated);
+		builder2.append("]");
+		return builder2.toString();
 	}
 }

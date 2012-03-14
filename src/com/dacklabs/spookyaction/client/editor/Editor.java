@@ -15,6 +15,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.ImplementedBy;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 /**
  * The main editor window. Displays the file in a text area and then listens for events on it to
@@ -22,7 +23,8 @@ import com.google.inject.Inject;
  * 
  * @author "David Ackerman (david.w.ackerman@gmail.com)"
  */
-public class Editor implements IsWidget {
+@Singleton
+public class Editor implements IsWidget, HasCursor {
 
 	@ImplementedBy(EditorView.class)
 	public interface Display extends IsWidget {
@@ -32,6 +34,8 @@ public class Editor implements IsWidget {
 		void setEditorContent(String content);
 
 		void setSaveHandler(ClickHandler handler);
+
+		int getCursorPosition();
 	}
 
 	private final Display display;
@@ -48,6 +52,11 @@ public class Editor implements IsWidget {
 
 		eventBus.addHandler(OpenFileEvent.TYPE, new NewFileHandler());
 		display.setSaveHandler(new SaveHandler());
+	}
+
+	@Override
+	public int getCursorLocation() {
+		return display.getCursorPosition();
 	}
 
 	private class NewFileHandler implements OpenFileEventHandler {

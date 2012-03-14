@@ -22,27 +22,32 @@ public class EditorView extends Composite implements Editor.Display {
 	interface EditorViewUiBinder extends UiBinder<Widget, EditorView> {
 	}
 
-    @UiField Button saveButton;
-	@UiField TextArea editorArea;
-    @UiField CurrentDiffView currentDiff;
+	@UiField Button saveButton;
+	@UiField TextArea textArea;
+	@UiField CurrentDiffView currentDiff;
 
 	@Inject
-    public EditorView() {
+	public EditorView() {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
 
-    @Override
-    public String getEditorContent() {
-        return editorArea.getText();
-    }
+	@Override
+	public String getEditorContent() {
+		return textArea.getText();
+	}
 
 	@Override
 	public void setEditorContent(String content) {
-		editorArea.setText(content);
+		textArea.setText(content);
 	}
 
-    @Override
-    public void setSaveHandler(ClickHandler handler) {
-        saveButton.addClickHandler(handler);
-    }
+	@Override
+	public void setSaveHandler(ClickHandler handler) {
+		saveButton.addClickHandler(handler);
+	}
+
+	@Override
+	public int getCursorPosition() {
+		return textArea.getCursorPos();
+	}
 }

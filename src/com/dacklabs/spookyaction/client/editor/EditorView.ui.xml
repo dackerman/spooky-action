@@ -22,6 +22,6 @@
 	<g:FlowPanel styleName="{style.editor}">
 		<g:Button ui:field="saveButton" />
 		<editor:CurrentDiffView ui:field="currentDiff" />
-		<g:TextArea ui:field="editorArea" styleName="{style.editor-txt}" />
+		<g:TextArea ui:field="textArea" styleName="{style.editor-txt}" />
 	</g:FlowPanel>
 </ui:UiBinder> 
