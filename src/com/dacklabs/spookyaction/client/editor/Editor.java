@@ -1,5 +1,9 @@
 package com.dacklabs.spookyaction.client.editor;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.dacklabs.spookyaction.client.command.EditingSurface;
 import com.dacklabs.spookyaction.client.events.ErrorEvent;
 import com.dacklabs.spookyaction.client.events.InfoEvent;
 import com.dacklabs.spookyaction.client.events.OpenFileEvent;
@@ -9,8 +13,11 @@ import com.dacklabs.spookyaction.shared.File;
 import com.dacklabs.spookyaction.shared.UpdateResult;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.ImplementedBy;
@@ -24,18 +31,29 @@ import com.google.inject.Singleton;
  * @author "David Ackerman (david.w.ackerman@gmail.com)"
  */
 @Singleton
-public class Editor implements IsWidget, HasCursor {
+public class Editor implements IsWidget, HasCursor, EditingSurface {
 
 	@ImplementedBy(EditorView.class)
 	public interface Display extends IsWidget {
 
-		String getEditorContent();
+		/**
+		 * Creates a new line in the editor and returns it.
+		 */
+		HasText newLine();
 
-		void setEditorContent(String content);
+		/**
+		 * Clears all lines from the editor.
+		 */
+		void clearWindow();
 
+		/**
+		 * Sets the callback for when the user clicks "save".
+		 */
 		void setSaveHandler(ClickHandler handler);
 
-		int getCursorPosition();
+		void addKeyPressHandler(KeyPressHandler handler);
+
+		void addKeyUpHandler(KeyUpHandler handler);
 	}
 
 	private final Display display;
@@ -43,6 +61,10 @@ public class Editor implements IsWidget, HasCursor {
 
 	private File currentFile;
 	private final EventBus eventBus;
+
+	private final List<String> lines = new ArrayList<String>();
+	private final List<HasText> uiLines = new ArrayList<HasText>();
+	private final int cursorLocation = 0;
 
 	@Inject
 	public Editor(Display display, EventBus eventBus, FileServiceAsync fileService) {
@@ -54,9 +76,17 @@ public class Editor implements IsWidget, HasCursor {
 		display.setSaveHandler(new SaveHandler());
 	}
 
+	public void addKeyPressHandler(KeyPressHandler handler) {
+		display.addKeyPressHandler(handler);
+	}
+
+	public void addKeyUpHandler(KeyUpHandler handler) {
+		display.addKeyUpHandler(handler);
+	}
+
 	@Override
 	public int getCursorLocation() {
-		return display.getCursorPosition();
+		return cursorLocation;
 	}
 
 	private class NewFileHandler implements OpenFileEventHandler {
@@ -64,7 +94,7 @@ public class Editor implements IsWidget, HasCursor {
 		@Override
 		public void onFileRecieved(File file) {
 			currentFile = file;
-			display.setEditorContent(file.getContent());
+			setContent(file);
 		}
 	}
 
@@ -89,8 +119,33 @@ public class Editor implements IsWidget, HasCursor {
 		}
 	}
 
+	private void setContent(File file) {
+		lines.clear();
+		uiLines.clear();
+		display.clearWindow();
+
+		String[] fileLines = file.getContent().split("\n");
+		for (String line : fileLines) {
+			HasText newLine = display.newLine();
+			newLine.setText(line);
+			lines.add(line);
+			uiLines.add(newLine);
+		}
+	}
+
 	@Override
 	public Widget asWidget() {
 		return display.asWidget();
+	}
+
+	@Override
+	public String getLine(int lineNumber) {
+		return lines.get(lineNumber);
+	}
+
+	@Override
+	public void updateLine(int lineNumber, String line) {
+		lines.set(lineNumber, line);
+		uiLines.get(lineNumber).setText(line);
 	}
 }

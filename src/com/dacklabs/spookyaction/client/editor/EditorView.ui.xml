@@ -21,7 +21,8 @@
 	</ui:style>
 	<g:FlowPanel styleName="{style.editor}">
 		<g:Button ui:field="saveButton" />
-		<editor:CurrentDiffView ui:field="currentDiff" />
-		<g:TextArea ui:field="textArea" styleName="{style.editor-txt}" />
+		<g:FlowPanel ui:field="textArea" styleName="{style.editor-txt}">
+		  <g:HTMLPanel>No data yet...</g:HTMLPanel>
+		</g:FlowPanel>
 	</g:FlowPanel>
 </ui:UiBinder> 

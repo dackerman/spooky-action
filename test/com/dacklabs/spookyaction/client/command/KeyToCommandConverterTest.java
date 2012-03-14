@@ -32,21 +32,21 @@ public class KeyToCommandConverterTest implements CommandEventHandler {
 	@Test
 	public void testKeyIsTranslatedToACommand() {
 		userPressesKey('d');
-		assertExpectedCommandWas(new Command(0, CommandType.KEY, "d", 1));
+		assertExpectedCommandWas(new Command(0, 0, CommandType.KEY, "d", 1));
 	}
 
 	@Test
 	public void testOffsetDependsOnTheCursorPosition() {
 		cursorIsAt(24);
 		userPressesKey('a');
-		assertExpectedCommandWas(new Command(24, CommandType.KEY, "a", 1));
+		assertExpectedCommandWas(new Command(0, 24, CommandType.KEY, "a", 1));
 	}
 
 	@Test
 	public void testBackspaceGeneratesBackspaceCommand() {
 		cursorIsAt(10);
 		userPressesKeyCode(KeyCodes.KEY_BACKSPACE);
-		assertExpectedCommandWas(new Command(10, CommandType.BACKSPACE, null, 1));
+		assertExpectedCommandWas(new Command(0, 10, CommandType.BACKSPACE, null, 1));
 	}
 
 	private void cursorIsAt(int location) {

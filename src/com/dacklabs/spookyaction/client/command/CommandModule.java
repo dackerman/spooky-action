@@ -9,6 +9,7 @@ public class CommandModule extends AbstractGinModule {
 
 	@Override
 	protected void configure() {
+		bind(EditingSurface.class).to(Editor.class).asEagerSingleton();
 	}
 
 	@Provides

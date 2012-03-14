@@ -2,11 +2,17 @@ package com.dacklabs.spookyaction.client.editor;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.TextArea;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HasText;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 
@@ -23,22 +29,11 @@ public class EditorView extends Composite implements Editor.Display {
 	}
 
 	@UiField Button saveButton;
-	@UiField TextArea textArea;
-	@UiField CurrentDiffView currentDiff;
+	@UiField FlowPanel textArea;
 
 	@Inject
 	public EditorView() {
 		initWidget(uiBinder.createAndBindUi(this));
-	}
-
-	@Override
-	public String getEditorContent() {
-		return textArea.getText();
-	}
-
-	@Override
-	public void setEditorContent(String content) {
-		textArea.setText(content);
 	}
 
 	@Override
@@ -47,7 +42,24 @@ public class EditorView extends Composite implements Editor.Display {
 	}
 
 	@Override
-	public int getCursorPosition() {
-		return textArea.getCursorPos();
+	public HasText newLine() {
+		Label label = new Label();
+		textArea.add(label);
+		return label;
+	}
+
+	@Override
+	public void clearWindow() {
+		textArea.clear();
+	}
+
+	@Override
+	public void addKeyPressHandler(KeyPressHandler handler) {
+		textArea.addDomHandler(handler, KeyPressEvent.getType());
+	}
+
+	@Override
+	public void addKeyUpHandler(KeyUpHandler handler) {
+		textArea.addDomHandler(handler, KeyUpEvent.getType());
 	}
 }

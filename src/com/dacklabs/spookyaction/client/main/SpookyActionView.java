@@ -9,7 +9,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 
-public class SpookyActionView extends Composite {
+public class SpookyActionView extends Composite implements SpookyAction.Display {
 
 	private static SpookyActionViewUiBinder uiBinder = GWT.create(SpookyActionViewUiBinder.class);
 
@@ -25,5 +25,10 @@ public class SpookyActionView extends Composite {
 		this.editor = editor;
 
 		initWidget(uiBinder.createAndBindUi(this));
+	}
+
+	@Override
+	public Editor getEditor() {
+		return editor;
 	}
 }

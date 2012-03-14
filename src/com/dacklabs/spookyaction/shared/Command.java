@@ -13,7 +13,8 @@ public class Command implements IsSerializable {
 	private int offset;
 	private CommandType type;
 	private String data;
-	private int repeated = 1;
+	private int repeated;
+	private int line;
 
 	public enum CommandType {
 		BACKSPACE, KEY, CLICK
@@ -23,11 +24,19 @@ public class Command implements IsSerializable {
 	private Command() {
 	}
 
-	public Command(int offset, CommandType type, String data, int repeated) {
+	public Command(int line, int offset, CommandType type, String data, int repeated) {
+		this.line = line;
 		this.offset = offset;
 		this.type = type;
 		this.data = data;
 		this.repeated = repeated;
+	}
+
+	/**
+	 * The line number on which the command was executed.
+	 */
+	public int getLineNumber() {
+		return line;
 	}
 
 	/**
@@ -66,6 +75,11 @@ public class Command implements IsSerializable {
 		private Builder() {
 		}
 
+		public Builder onLine(int line) {
+			command.line = line;
+			return this;
+		}
+
 		public Builder withOffset(int offset) {
 			command.offset = offset;
 			return this;
@@ -93,7 +107,7 @@ public class Command implements IsSerializable {
 		}
 
 		private Command newCommand() {
-			return new Command(0, CommandType.KEY, null, 1);
+			return new Command(0, 0, CommandType.KEY, null, 1);
 		}
 	}
 
