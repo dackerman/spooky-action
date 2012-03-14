@@ -3,6 +3,11 @@ package com.dacklabs.spookyaction.client.command;
 import com.dacklabs.spookyaction.shared.Command;
 import com.google.web.bindery.event.shared.Event;
 
+/**
+ * Represents a fired Command. Is sent to {@link CommandEventHandler}s.
+ * 
+ * @author "David Ackerman (david.w.ackerman@gmail.com)"
+ */
 public class CommandEvent extends Event<CommandEventHandler> {
 
 	public static final Type<CommandEventHandler> TYPE = new Type<CommandEventHandler>();

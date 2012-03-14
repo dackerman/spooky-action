@@ -96,4 +96,43 @@ public class Command implements IsSerializable {
 			return new Command(0, CommandType.KEY, null, 1);
 		}
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((data == null) ? 0 : data.hashCode());
+		result = prime * result + offset;
+		result = prime * result + repeated;
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Command other = (Command) obj;
+		if (data == null) {
+			if (other.data != null)
+				return false;
+		} else if (!data.equals(other.data))
+			return false;
+		if (offset != other.offset)
+			return false;
+		if (repeated != other.repeated)
+			return false;
+		if (type != other.type)
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("Command [offset=%s, type=%s, data=%s, repeated=%s]", offset, type, data, repeated);
+	}
 }
