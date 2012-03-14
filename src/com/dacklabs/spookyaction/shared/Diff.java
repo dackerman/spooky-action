@@ -2,47 +2,54 @@ package com.dacklabs.spookyaction.shared;
 
 import java.util.ArrayList;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 /**
  * Represents a diff between the file on the client and file on the server.
  * 
  * @author "David Ackerman (david.w.ackerman@gmail.com)"
  */
-public class Diff {
+public class Diff implements IsSerializable {
 
-    private final String filename;
-    private final ArrayList<DiffLine> diff = new ArrayList<DiffLine>();
+	private String filename;
+	private ArrayList<DiffLine> diff;
 
-    public Diff(String filename) {
-        this.filename = filename;
-    }
+	@SuppressWarnings("unused")
+	private Diff() {
+	}
 
-    public String getFilename() {
-        return filename;
-    }
+	public Diff(String filename) {
+		this.filename = filename;
+		this.diff = new ArrayList<DiffLine>();
+	}
 
-    public Iterable<DiffLine> getDiffLines() {
-        return diff;
-    }
+	public String getFilename() {
+		return filename;
+	}
 
-    public void addToDiff(DiffLine diffLine) {
-        diff.add(diffLine);
-    }
+	public Iterable<DiffLine> getDiffLines() {
+		return diff;
+	}
 
-    public static class DiffLine {
-        private final int line;
-        private final String content;
+	public void addToDiff(DiffLine diffLine) {
+		diff.add(diffLine);
+	}
 
-        public DiffLine(int line, String content) {
-            this.line = line;
-            this.content = content;
-        }
+	public static class DiffLine {
+		private final int line;
+		private final String content;
 
-        public int getLine() {
-            return line;
-        }
+		public DiffLine(int line, String content) {
+			this.line = line;
+			this.content = content;
+		}
 
-        public String getContent() {
-            return content;
-        }
-    }
+		public int getLine() {
+			return line;
+		}
+
+		public String getContent() {
+			return content;
+		}
+	}
 }

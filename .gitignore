@@ -1,0 +1,6 @@
+war/WEB-INF/classes/
+war/WEB-INF/deploy/
+war/spooky_action/
+.gwt/
+.settings/
+gwt-unitCache/
