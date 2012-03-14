@@ -6,7 +6,6 @@ import java.util.Scanner;
 
 import com.dacklabs.spookyaction.client.rpc.FileService;
 import com.dacklabs.spookyaction.shared.Command;
-import com.dacklabs.spookyaction.shared.Diff;
 import com.dacklabs.spookyaction.shared.File;
 import com.dacklabs.spookyaction.shared.FileUnavailableException;
 import com.dacklabs.spookyaction.shared.UpdateResult;
@@ -22,17 +21,8 @@ public class FileServiceImpl extends RemoteServiceServlet implements FileService
 
 	@Override
 	public UpdateResult updateFile(File file, ArrayList<Command> commands) throws FileUnavailableException {
-		StringBuffer data = getFileContents(file.getFilename());
-		for (Command command : commands) {
-			CommandProcessorFactory.fromCommand(command).process(command, data);
-		}
 		return null;
 	}
-
-    @Override
-    public UpdateResult updateFileWithDiff(Diff diff) throws FileUnavailableException {
-        return null;
-    }
 
 	private StringBuffer getFileContents(String path) throws FileUnavailableException {
 		Scanner s = null;

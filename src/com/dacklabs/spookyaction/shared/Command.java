@@ -12,7 +12,8 @@ public class Command implements IsSerializable {
 
 	private int offset;
 	private CommandType type;
-	private int keyCode;
+	private String data;
+	private int repeated = 1;
 
 	public enum CommandType {
 		BACKSPACE, KEY, CLICK
@@ -22,14 +23,11 @@ public class Command implements IsSerializable {
 	private Command() {
 	}
 
-	public Command(int offset, CommandType type) {
-		this(offset, type, -1);
-	}
-
-	public Command(int offset, CommandType type, int keyCode) {
+	public Command(int offset, CommandType type, String data, int repeated) {
 		this.offset = offset;
 		this.type = type;
-		this.keyCode = keyCode;
+		this.data = data;
+		this.repeated = repeated;
 	}
 
 	/**
@@ -48,9 +46,54 @@ public class Command implements IsSerializable {
 	}
 
 	/**
-	 * The keyCode that was pressed. If
+	 * The data included in the command.
 	 */
-	public int getKeyCode() {
-		return keyCode;
+	public String getData() {
+		return data;
+	}
+
+	public int getRepeated() {
+		return repeated;
+	}
+
+	public static Command.Builder builder() {
+		return new Builder();
+	}
+
+	public static class Builder {
+		private Command command = newCommand();
+
+		private Builder() {
+		}
+
+		public Builder withOffset(int offset) {
+			command.offset = offset;
+			return this;
+		}
+
+		public Builder ofType(CommandType type) {
+			command.type = type;
+			return this;
+		}
+
+		public Builder withData(String data) {
+			command.data = data;
+			return this;
+		}
+
+		public Builder repeatedTimes(int repeated) {
+			command.repeated = repeated;
+			return this;
+		}
+
+		public Command build() {
+			Command builtCommand = command;
+			command = newCommand();
+			return builtCommand;
+		}
+
+		private Command newCommand() {
+			return new Command(0, CommandType.KEY, null, 1);
+		}
 	}
 }

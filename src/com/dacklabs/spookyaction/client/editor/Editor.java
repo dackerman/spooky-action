@@ -1,12 +1,10 @@
 package com.dacklabs.spookyaction.client.editor;
 
-import com.dacklabs.spookyaction.client.diff.DiffAlgorithm;
 import com.dacklabs.spookyaction.client.events.ErrorEvent;
 import com.dacklabs.spookyaction.client.events.InfoEvent;
 import com.dacklabs.spookyaction.client.events.OpenFileEvent;
 import com.dacklabs.spookyaction.client.events.OpenFileEventHandler;
 import com.dacklabs.spookyaction.client.rpc.FileServiceAsync;
-import com.dacklabs.spookyaction.shared.Diff;
 import com.dacklabs.spookyaction.shared.File;
 import com.dacklabs.spookyaction.shared.UpdateResult;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -29,29 +27,27 @@ public class Editor implements IsWidget {
 	@ImplementedBy(EditorView.class)
 	public interface Display extends IsWidget {
 
-        String getEditorContent();
+		String getEditorContent();
 
 		void setEditorContent(String content);
 
-        void setSaveHandler(ClickHandler handler);
+		void setSaveHandler(ClickHandler handler);
 	}
 
 	private final Display display;
-    private final FileServiceAsync fileService;
-    private final DiffAlgorithm diffAlgorithm;
-	
+	private final FileServiceAsync fileService;
+
 	private File currentFile;
-    private final EventBus eventBus;
+	private final EventBus eventBus;
 
 	@Inject
-    public Editor(Display display, EventBus eventBus, FileServiceAsync fileService, DiffAlgorithm diffAlgorithm) {
+	public Editor(Display display, EventBus eventBus, FileServiceAsync fileService) {
 		this.display = display;
-        this.eventBus = eventBus;
-        this.fileService = fileService;
-        this.diffAlgorithm = diffAlgorithm;
+		this.eventBus = eventBus;
+		this.fileService = fileService;
 
 		eventBus.addHandler(OpenFileEvent.TYPE, new NewFileHandler());
-        display.setSaveHandler(new SaveHandler());
+		display.setSaveHandler(new SaveHandler());
 	}
 
 	private class NewFileHandler implements OpenFileEventHandler {
@@ -63,27 +59,26 @@ public class Editor implements IsWidget {
 		}
 	}
 
-    private class SaveHandler implements ClickHandler {
+	private class SaveHandler implements ClickHandler {
 
-        @Override
-        public void onClick(ClickEvent event) {
-            Diff diff = diffAlgorithm.calculateDiff(currentFile.getContent(), display.getEditorContent());
-            fileService.updateFileWithDiff(diff, new OnFileUpdated());
-        }
-    }
+		@Override
+		public void onClick(ClickEvent event) {
+			// TODO(dackerman): Compress and send commands to the server.
+		}
+	}
 
-    private class OnFileUpdated implements AsyncCallback<UpdateResult> {
+	private class OnFileUpdated implements AsyncCallback<UpdateResult> {
 
-        @Override
-        public void onSuccess(UpdateResult result) {
-            eventBus.fireEvent(new InfoEvent("Saved."));
-        }
+		@Override
+		public void onSuccess(UpdateResult result) {
+			eventBus.fireEvent(new InfoEvent("Saved."));
+		}
 
-        @Override
-        public void onFailure(Throwable caught) {
-            eventBus.fireEvent(new ErrorEvent("Couldn't save: " + caught.getMessage()));
-        }
-    }
+		@Override
+		public void onFailure(Throwable caught) {
+			eventBus.fireEvent(new ErrorEvent("Couldn't save: " + caught.getMessage()));
+		}
+	}
 
 	@Override
 	public Widget asWidget() {
