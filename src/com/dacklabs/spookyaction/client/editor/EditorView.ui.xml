@@ -12,6 +12,8 @@
 		}
 		
 		.editor-txt {
+			background-color: blue;
+			color: white;
 			bottom: 0px;
 			left: 0px;
 			position: absolute;
@@ -21,8 +23,10 @@
 	</ui:style>
 	<g:FlowPanel styleName="{style.editor}">
 		<g:Button ui:field="saveButton" />
-		<g:FlowPanel ui:field="textArea" styleName="{style.editor-txt}">
-		  <g:HTMLPanel>No data yet...</g:HTMLPanel>
-		</g:FlowPanel>
+		<g:FocusPanel ui:field="textArea" styleName="{style.editor-txt}" >
+          <g:FlowPanel>
+            <g:HTMLPanel>No data yet...</g:HTMLPanel>
+          </g:FlowPanel>
+		</g:FocusPanel>
 	</g:FlowPanel>
 </ui:UiBinder> 

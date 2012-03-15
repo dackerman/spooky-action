@@ -7,16 +7,20 @@ import org.junit.Test;
 
 import com.dacklabs.spookyaction.shared.Command;
 import com.dacklabs.spookyaction.shared.Command.CommandType;
+import com.google.gwt.event.shared.SimpleEventBus;
 
 public class UiUpdaterTest {
 
 	private UiUpdater updater;
 	private StubEditingSurface editingSurface;
+	private SimpleEventBus eventBus;
 
 	@Before
 	public void setUp() {
 		editingSurface = new StubEditingSurface();
-		updater = new UiUpdater(editingSurface);
+		eventBus = new SimpleEventBus();
+		updater = new UiUpdater(eventBus);
+		updater.setEditor(editingSurface);
 	}
 
 	@Test
@@ -50,24 +54,5 @@ public class UiUpdaterTest {
 
 	private void sendCommand(Command command) {
 		updater.onCommand(command);
-	}
-
-	private static class StubEditingSurface implements EditingSurface {
-
-		private String[] content = new String[] {};
-
-		public void setContent(String... content) {
-			this.content = content;
-		}
-
-		@Override
-		public String getLine(int lineNumber) {
-			return content[lineNumber];
-		}
-
-		@Override
-		public void updateLine(int lineNumber, String line) {
-			content[lineNumber] = line;
-		}
 	}
 }

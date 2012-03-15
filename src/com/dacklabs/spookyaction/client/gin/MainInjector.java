@@ -1,6 +1,5 @@
 package com.dacklabs.spookyaction.client.gin;
 
-import com.dacklabs.spookyaction.client.command.CommandPipeline;
 import com.dacklabs.spookyaction.client.command.CommandModule;
 import com.dacklabs.spookyaction.client.editor.EditorModule;
 import com.dacklabs.spookyaction.client.main.SpookyAction;
@@ -11,6 +10,4 @@ import com.google.gwt.inject.client.Ginjector;
 public interface MainInjector extends Ginjector {
 
 	SpookyAction getMainView();
-
-	CommandPipeline getCommandPipeline();
 }

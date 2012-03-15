@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.dacklabs.spookyaction.client.editor.HasCursor;
 import com.dacklabs.spookyaction.shared.Command;
 import com.dacklabs.spookyaction.shared.Command.CommandType;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -19,14 +18,15 @@ public class KeyToCommandConverterTest implements CommandEventHandler {
 	private KeyToCommandConverter converter;
 	private Command commandReturned;
 	private SimpleEventBus eventBus;
-	private StubHasCursor hasCursor;
+	private StubEditingSurface editingSurface;
 
 	@Before
 	public void setUp() {
 		eventBus = new SimpleEventBus();
 		eventBus.addHandler(CommandEvent.TYPE, this);
-		hasCursor = new StubHasCursor();
-		converter = new KeyToCommandConverter(hasCursor, eventBus);
+		editingSurface = new StubEditingSurface();
+		converter = new KeyToCommandConverter(eventBus);
+		converter.setEditor(editingSurface);
 	}
 
 	@Test
@@ -50,7 +50,7 @@ public class KeyToCommandConverterTest implements CommandEventHandler {
 	}
 
 	private void cursorIsAt(int location) {
-		hasCursor.setLocation(location);
+		editingSurface.setLocation(location);
 	}
 
 	private void assertExpectedCommandWas(Command expectedCommand) {
@@ -64,20 +64,6 @@ public class KeyToCommandConverterTest implements CommandEventHandler {
 
 	private void userPressesKeyCode(int keyCode) {
 		converter.onKeyUp(new TestKeyUpEvent(keyCode));
-	}
-
-	private static class StubHasCursor implements HasCursor {
-
-		private int location;
-
-		public void setLocation(int location) {
-			this.location = location;
-		}
-
-		@Override
-		public int getCursorLocation() {
-			return location;
-		}
 	}
 
 	private static class TestKeyUpEvent extends KeyUpEvent {

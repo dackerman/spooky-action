@@ -1,6 +1,5 @@
 package com.dacklabs.spookyaction.client.command;
 
-import com.dacklabs.spookyaction.client.editor.HasCursor;
 import com.dacklabs.spookyaction.shared.Command;
 import com.dacklabs.spookyaction.shared.Command.CommandType;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -19,12 +18,18 @@ import com.google.inject.Inject;
 public class KeyToCommandConverter implements KeyPressHandler, KeyUpHandler {
 
 	private final EventBus eventBus;
-	private final HasCursor hasCursor;
+	private EditingSurface editingSurface;
 
 	@Inject
-	public KeyToCommandConverter(HasCursor hasCursor, EventBus eventBus) {
-		this.hasCursor = hasCursor;
+	public KeyToCommandConverter(EventBus eventBus) {
 		this.eventBus = eventBus;
+	}
+
+	public void setEditor(EditingSurface editor) {
+		editingSurface = editor;
+
+		editingSurface.addKeyPressHandler(this);
+		editingSurface.addKeyUpHandler(this);
 	}
 
 	@Override
@@ -34,7 +39,7 @@ public class KeyToCommandConverter implements KeyPressHandler, KeyUpHandler {
 		Command.Builder builder = Command.builder();
 		builder.ofType(CommandType.KEY);
 		builder.repeatedTimes(1);
-		builder.withOffset(hasCursor.getCursorLocation());
+		builder.withOffset(editingSurface.getCursorLocation());
 		builder.withData(String.valueOf(charCode));
 
 		eventBus.fireEvent(new CommandEvent(builder.build()));
@@ -43,7 +48,7 @@ public class KeyToCommandConverter implements KeyPressHandler, KeyUpHandler {
 	@Override
 	public void onKeyUp(KeyUpEvent event) {
 		Command.Builder builder = Command.builder();
-		builder.withOffset(hasCursor.getCursorLocation());
+		builder.withOffset(editingSurface.getCursorLocation());
 
 		switch (event.getNativeKeyCode()) {
 

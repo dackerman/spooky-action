@@ -6,6 +6,5 @@ public class EditorModule extends AbstractGinModule {
 
 	@Override
 	protected void configure() {
-		bind(Editor.class).asEagerSingleton();
 	}
 }
