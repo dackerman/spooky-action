@@ -2,6 +2,7 @@ package com.dacklabs.spookyaction.client.main;
 
 import com.dacklabs.spookyaction.client.editor.Editor;
 import com.dacklabs.spookyaction.client.fileselector.FileSelector;
+import com.dacklabs.spookyaction.client.stats.StatsViewer;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -16,13 +17,15 @@ public class SpookyActionView extends Composite implements SpookyAction.Display 
 	interface SpookyActionViewUiBinder extends UiBinder<Widget, SpookyActionView> {
 	}
 
-	@UiField(provided = true) FileSelector fileSelector;
-	@UiField(provided = true) Editor editor;
+	@UiField(provided = true) final FileSelector fileSelector;
+	@UiField(provided = true) final Editor editor;
+	@UiField(provided = true) final StatsViewer stats;
 
 	@Inject
-	public SpookyActionView(FileSelector fileSelector, Editor editor) {
+	public SpookyActionView(FileSelector fileSelector, Editor editor, StatsViewer stats) {
 		this.fileSelector = fileSelector;
 		this.editor = editor;
+		this.stats = stats;
 
 		initWidget(uiBinder.createAndBindUi(this));
 	}
@@ -30,5 +33,10 @@ public class SpookyActionView extends Composite implements SpookyAction.Display 
 	@Override
 	public Editor getEditor() {
 		return editor;
+	}
+
+	@Override
+	public StatsViewer getStats() {
+		return stats;
 	}
 }

@@ -2,8 +2,6 @@ package com.dacklabs.spookyaction.client.editor;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import com.dacklabs.spookyaction.client.command.EditingSurface;
 import com.dacklabs.spookyaction.client.events.ErrorEvent;
@@ -32,8 +30,6 @@ import com.google.inject.Inject;
  * @author "David Ackerman (david.w.ackerman@gmail.com)"
  */
 public class Editor implements IsWidget, EditingSurface {
-
-	private static final Logger logger = Logger.getLogger(Editor.class.getName());
 
 	@ImplementedBy(EditorView.class)
 	public interface Display extends IsWidget {
@@ -66,11 +62,10 @@ public class Editor implements IsWidget, EditingSurface {
 
 	private final List<String> lines = new ArrayList<String>();
 	private final List<HasText> uiLines = new ArrayList<HasText>();
-	private final int cursorLocation = 0;
+	private int cursorLocation = 0;
 
 	@Inject
 	public Editor(Display display, EventBus eventBus, FileServiceAsync fileService) {
-		logger.log(Level.SEVERE, "Editor created: " + this.toString());
 		this.display = display;
 		this.eventBus = eventBus;
 		this.fileService = fileService;
@@ -79,19 +74,24 @@ public class Editor implements IsWidget, EditingSurface {
 		display.setSaveHandler(new SaveHandler());
 	}
 
+	@Override
 	public void addKeyPressHandler(KeyPressHandler handler) {
-		logger.log(Level.SEVERE, "Added keypress handler: " + handler.toString());
 		display.addKeyPressHandler(handler);
 	}
 
+	@Override
 	public void addKeyUpHandler(KeyUpHandler handler) {
-		logger.log(Level.SEVERE, "Added keyup handler: " + handler.toString());
 		display.addKeyUpHandler(handler);
 	}
 
 	@Override
 	public int getCursorLocation() {
 		return cursorLocation;
+	}
+
+	@Override
+	public void setCursorLocation(int cursorLocation) {
+		this.cursorLocation = cursorLocation;
 	}
 
 	private class NewFileHandler implements OpenFileEventHandler {

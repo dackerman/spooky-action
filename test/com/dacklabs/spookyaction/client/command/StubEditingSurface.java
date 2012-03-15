@@ -32,6 +32,11 @@ class StubEditingSurface implements EditingSurface {
 	}
 
 	@Override
+	public void setCursorLocation(int cursorLocation) {
+		location = cursorLocation;
+	}
+
+	@Override
 	public void addKeyPressHandler(KeyPressHandler keyPressHandler) {
 	}
 

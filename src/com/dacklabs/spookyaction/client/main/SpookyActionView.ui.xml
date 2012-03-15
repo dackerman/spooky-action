@@ -3,10 +3,17 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
 	xmlns:client="urn:import:com.dacklabs.spookyaction.client">
 	<ui:style>
-		
+		.container {
+			width: 50%;
+		}
 	</ui:style>
 	<g:FlowPanel>
-	  <client:fileselector.FileSelector ui:field="fileSelector" />
-	  <client:editor.Editor ui:field="editor" />
+	  <g:FlowPanel addStyleNames="{style.container}">
+        <client:fileselector.FileSelector ui:field="fileSelector" />
+        <client:editor.Editor ui:field="editor" />
+	  </g:FlowPanel>
+	  <g:FlowPanel>
+	    <client:stats.StatsViewer ui:field="stats" />
+	  </g:FlowPanel>
 	</g:FlowPanel>
 </ui:UiBinder> 

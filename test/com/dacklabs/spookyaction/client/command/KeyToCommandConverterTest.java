@@ -2,6 +2,7 @@ package com.dacklabs.spookyaction.client.command;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -46,7 +47,40 @@ public class KeyToCommandConverterTest implements CommandEventHandler {
 	public void testBackspaceGeneratesBackspaceCommand() {
 		cursorIsAt(10);
 		userPressesKeyCode(KeyCodes.KEY_BACKSPACE);
-		assertExpectedCommandWas(new Command(0, 10, CommandType.BACKSPACE, null, 1));
+		assertExpectedCommandWas(new Command(0, 9, CommandType.BACKSPACE, null, 1));
+	}
+
+	@Test
+	public void testPressingBackspaceMultipleTimesMovesTheCursorBack() {
+		cursorIsAt(5);
+		userPressesKeyCode(KeyCodes.KEY_BACKSPACE);
+		userPressesKeyCode(KeyCodes.KEY_BACKSPACE);
+		userPressesKeyCode(KeyCodes.KEY_BACKSPACE);
+		userPressesKeyCode(KeyCodes.KEY_BACKSPACE);
+		assertCursorIsAt(1);
+	}
+
+	@Test
+	public void testBackspaceDoesntDoAnythingIfItIsAtTheBeginningOfTheLine() {
+		cursorIsAt(0);
+		userPressesKeyCode(KeyCodes.KEY_BACKSPACE);
+		assertNoCommand();
+	}
+
+	@Test
+	public void testCursorPositionIsUpdatedAfterProcessingACommmand() {
+		cursorIsAt(1);
+		userPressesKey('a');
+		assertCursorIsAt(2);
+	}
+
+	@Test
+	public void testCursorPositionChangesAfterMultipleCommands() {
+		cursorIsAt(5);
+		userPressesKey('d');
+		userPressesKey('f');
+		userPressesKey('l');
+		assertCursorIsAt(8);
 	}
 
 	private void cursorIsAt(int location) {
@@ -56,6 +90,14 @@ public class KeyToCommandConverterTest implements CommandEventHandler {
 	private void assertExpectedCommandWas(Command expectedCommand) {
 		assertNotNull("No command was fired.", commandReturned);
 		assertEquals(expectedCommand, commandReturned);
+	}
+
+	private void assertNoCommand() {
+		assertNull("No command should have been fired. " + commandReturned, commandReturned);
+	}
+
+	private void assertCursorIsAt(int expectedCursorLocation) {
+		assertEquals(expectedCursorLocation, editingSurface.getCursorLocation());
 	}
 
 	private void userPressesKey(char key) {

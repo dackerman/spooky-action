@@ -3,6 +3,7 @@ package com.dacklabs.spookyaction.client.main;
 import com.dacklabs.spookyaction.client.command.KeyToCommandConverter;
 import com.dacklabs.spookyaction.client.command.UiUpdater;
 import com.dacklabs.spookyaction.client.editor.Editor;
+import com.dacklabs.spookyaction.client.stats.StatsViewer;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.ImplementedBy;
@@ -16,6 +17,8 @@ public class SpookyAction implements IsWidget {
 
 	@ImplementedBy(SpookyActionView.class)
 	public interface Display extends IsWidget {
+		StatsViewer getStats();
+
 		Editor getEditor();
 	}
 

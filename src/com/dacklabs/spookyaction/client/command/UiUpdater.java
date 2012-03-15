@@ -1,7 +1,5 @@
 package com.dacklabs.spookyaction.client.command;
 
-import java.util.logging.Logger;
-
 import com.dacklabs.spookyaction.shared.Command;
 import com.google.gwt.event.shared.EventBus;
 import com.google.inject.Inject;
@@ -13,8 +11,6 @@ import com.google.inject.Inject;
  * @author "David Ackerman (david.w.ackerman@gmail.com)"
  */
 public class UiUpdater implements CommandEventHandler {
-
-	private static final Logger logger = Logger.getLogger(UiUpdater.class.getName());
 
 	private EditingSurface editingSurface;
 

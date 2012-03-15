@@ -28,7 +28,18 @@ public interface EditingSurface {
 	 */
 	int getCursorLocation();
 
+	/**
+	 * Sets the cursor position of the editing surface.
+	 */
+	void setCursorLocation(int cursorLocation);
+
+	/**
+	 * Sets the handler for key presses.
+	 */
 	void addKeyPressHandler(KeyPressHandler keyPressHandler);
 
+	/**
+	 * Sets the handler for when special keys have been pressed.
+	 */
 	void addKeyUpHandler(KeyUpHandler keyUpHandler);
 }
