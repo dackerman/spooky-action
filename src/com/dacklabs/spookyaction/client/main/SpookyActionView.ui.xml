@@ -3,17 +3,31 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
 	xmlns:client="urn:import:com.dacklabs.spookyaction.client">
 	<ui:style>
-		.container {
-			width: 50%;
+		.left-container {
+			height: 100%;
+			left: 0px;
+			position: absolute;
+			right: 210px;
 		}
+		
+		.right-container {
+            height: 100%;
+            position: absolute;
+            right: 0px;
+            width: 200px;
+        }
 	</ui:style>
-	<g:FlowPanel>
-	  <g:FlowPanel addStyleNames="{style.container}">
+	<g:HTMLPanel>
+	
+	  <g:HTMLPanel addStyleNames="{style.left-container}">
         <client:fileselector.FileSelector ui:field="fileSelector" />
         <client:editor.Editor ui:field="editor" />
-	  </g:FlowPanel>
-	  <g:FlowPanel>
+	  </g:HTMLPanel>
+	  
+	  <g:HTMLPanel addStyleNames="{style.right-container}" >
+	    <h2>Command Stats</h2>
 	    <client:stats.StatsViewer ui:field="stats" />
-	  </g:FlowPanel>
-	</g:FlowPanel>
+	  </g:HTMLPanel>
+	  
+	</g:HTMLPanel>
 </ui:UiBinder> 

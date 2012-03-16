@@ -4,21 +4,13 @@
 	xmlns:editor="urn:import:com.dacklabs.spookyaction.client.editor">
 	<ui:style>
 		.editor {
-			bottom: 5px;
-			left: 5px;
-			position: absolute;
-			right: 5px;
-			top: 50px;
+			height: 100%;
 		}
 		
 		.editor-txt {
-			background-color: blue;
-			color: white;
-			bottom: 0px;
-			left: 0px;
-			position: absolute;
-			right: 0px;
-			top: 200px;
+			background-color: #404040;
+			color: #CAE682;
+			height: 100%;
 		}
 	</ui:style>
 	<g:FlowPanel styleName="{style.editor}">
