@@ -19,7 +19,6 @@ public class KeyToCommandConverter implements KeyPressHandler, KeyUpHandler {
 
 	private final EventBus eventBus;
 	private EditingSurface editingSurface;
-	private int cursorPosition = 0;
 
 	@Inject
 	public KeyToCommandConverter(EventBus eventBus) {
@@ -35,7 +34,7 @@ public class KeyToCommandConverter implements KeyPressHandler, KeyUpHandler {
 
 	@Override
 	public void onKeyPress(KeyPressEvent event) {
-		cursorPosition = editingSurface.getCursorLocation();
+		int cursorPosition = editingSurface.getCursorLocation();
 		char charCode = event.getCharCode();
 
 		Command.Builder builder = Command.builder();
@@ -52,18 +51,17 @@ public class KeyToCommandConverter implements KeyPressHandler, KeyUpHandler {
 
 	@Override
 	public void onKeyUp(KeyUpEvent event) {
-		if (cursorPosition < 0) {
-			return;
-		}
-
 		Command.Builder builder = Command.builder();
-		builder.withOffset(cursorPosition);
 
 		switch (event.getNativeKeyCode()) {
 
 		case KeyCodes.KEY_BACKSPACE:
+			int cursorPosition = editingSurface.getCursorLocation() - 1;
+			if (cursorPosition < 0) {
+				return;
+			}
+			builder.withOffset(cursorPosition);
 			builder.ofType(CommandType.BACKSPACE);
-			cursorPosition = editingSurface.getCursorLocation() - 1;
 			editingSurface.setCursorLocation(cursorPosition);
 			break;
 

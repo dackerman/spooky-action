@@ -51,16 +51,6 @@ public class KeyToCommandConverterTest implements CommandEventHandler {
 	}
 
 	@Test
-	public void testPressingBackspaceMultipleTimesMovesTheCursorBack() {
-		cursorIsAt(5);
-		userPressesKeyCode(KeyCodes.KEY_BACKSPACE);
-		userPressesKeyCode(KeyCodes.KEY_BACKSPACE);
-		userPressesKeyCode(KeyCodes.KEY_BACKSPACE);
-		userPressesKeyCode(KeyCodes.KEY_BACKSPACE);
-		assertCursorIsAt(1);
-	}
-
-	@Test
 	public void testBackspaceDoesntDoAnythingIfItIsAtTheBeginningOfTheLine() {
 		cursorIsAt(0);
 		userPressesKeyCode(KeyCodes.KEY_BACKSPACE);
@@ -81,6 +71,16 @@ public class KeyToCommandConverterTest implements CommandEventHandler {
 		userPressesKey('f');
 		userPressesKey('l');
 		assertCursorIsAt(8);
+	}
+
+	@Test
+	public void testPressingBackspaceMultipleTimesMovesTheCursorBack() {
+		cursorIsAt(5);
+		userPressesKeyCode(KeyCodes.KEY_BACKSPACE);
+		userPressesKeyCode(KeyCodes.KEY_BACKSPACE);
+		userPressesKeyCode(KeyCodes.KEY_BACKSPACE);
+		userPressesKeyCode(KeyCodes.KEY_BACKSPACE);
+		assertCursorIsAt(1);
 	}
 
 	private void cursorIsAt(int location) {
