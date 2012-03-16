@@ -3,7 +3,7 @@ package com.dacklabs.spookyaction.client.main;
 import com.dacklabs.spookyaction.client.gin.MainInjector;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.ui.RootLayoutPanel;
+import com.google.gwt.user.client.ui.RootPanel;
 
 public class Main implements EntryPoint {
 
@@ -13,7 +13,7 @@ public class Main implements EntryPoint {
 	public void onModuleLoad() {
 		SpookyAction main = injector.getMainView();
 
-		RootLayoutPanel.get().add(main);
+		RootPanel.get().add(main);
 
 		main.start();
 	}

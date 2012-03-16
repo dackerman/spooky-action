@@ -5,7 +5,7 @@
 	<ui:style>
 		.left-container {
 			height: 100%;
-			left: 0px;
+			left: 3px;
 			position: absolute;
 			right: 210px;
 		}
@@ -13,12 +13,13 @@
 		.right-container {
             height: 100%;
             position: absolute;
-            right: 0px;
+            right: 3px;
             width: 200px;
         }
 	</ui:style>
 	<g:HTMLPanel>
-	
+	  <p><strong>Spooky Action at a Distance</strong>: the editor for ultra-low bandwidth situations.</p>
+	  
 	  <g:HTMLPanel addStyleNames="{style.left-container}">
         <client:fileselector.FileSelector ui:field="fileSelector" />
         <client:editor.Editor ui:field="editor" />
