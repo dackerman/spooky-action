@@ -1,5 +1,6 @@
 package com.dacklabs.spookyaction.client.main;
 
+import com.dacklabs.spookyaction.client.command.CommandSyncer;
 import com.dacklabs.spookyaction.client.command.KeyToCommandConverter;
 import com.dacklabs.spookyaction.client.command.UiUpdater;
 import com.dacklabs.spookyaction.client.editor.Editor;
@@ -14,6 +15,7 @@ public class SpookyAction implements IsWidget {
 	private final Display display;
 	private final KeyToCommandConverter converter;
 	private final UiUpdater uiUpdater;
+	private final CommandSyncer syncer;
 
 	@ImplementedBy(SpookyActionView.class)
 	public interface Display extends IsWidget {
@@ -23,10 +25,11 @@ public class SpookyAction implements IsWidget {
 	}
 
 	@Inject
-	public SpookyAction(Display display, KeyToCommandConverter converter, UiUpdater uiUpdater) {
+	public SpookyAction(Display display, KeyToCommandConverter converter, UiUpdater uiUpdater, CommandSyncer syncer) {
 		this.display = display;
 		this.converter = converter;
 		this.uiUpdater = uiUpdater;
+		this.syncer = syncer;
 	}
 
 	public void start() {

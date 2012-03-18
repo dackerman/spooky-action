@@ -1,17 +1,15 @@
 package com.dacklabs.spookyaction.client.editor;
 
-import java.util.logging.Logger;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
-import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.Label;
@@ -30,17 +28,21 @@ public class EditorView extends Composite implements Editor.Display {
 	interface EditorViewUiBinder extends UiBinder<Widget, EditorView> {
 	}
 
+	/**
+	 * Represents the CSS of the editor.
+	 */
+	public interface Style extends CssResource {
+		String line();
+	}
+
 	@UiField Button saveButton;
-	@UiField FocusPanel textArea;
-	private final TestHandler handler;
+	@UiField FocusPanel focusPanel;
+	@UiField FlowPanel editorPanel;
+	@UiField Style style;
 
 	@Inject
 	public EditorView() {
 		initWidget(uiBinder.createAndBindUi(this));
-
-		this.handler = new TestHandler();
-		addKeyPressHandler(handler);
-		addKeyUpHandler(handler);
 	}
 
 	@Override
@@ -51,37 +53,23 @@ public class EditorView extends Composite implements Editor.Display {
 	@Override
 	public HasText newLine() {
 		Label label = new Label();
-		textArea.add(label);
+		label.setStyleName(style.line());
+		editorPanel.add(label);
 		return label;
 	}
 
 	@Override
 	public void clearWindow() {
-		textArea.clear();
+		editorPanel.clear();
 	}
 
 	@Override
 	public void addKeyPressHandler(KeyPressHandler handler) {
-		textArea.addKeyPressHandler(handler);
+		focusPanel.addKeyPressHandler(handler);
 	}
 
 	@Override
 	public void addKeyUpHandler(KeyUpHandler handler) {
-		textArea.addKeyUpHandler(handler);
-	}
-
-	private static class TestHandler implements KeyPressHandler, KeyUpHandler {
-
-		private static final Logger logger = Logger.getLogger(TestHandler.class.getName());
-
-		@Override
-		public void onKeyUp(KeyUpEvent event) {
-			// logger.severe("Key up!");
-		}
-
-		@Override
-		public void onKeyPress(KeyPressEvent event) {
-			logger.severe("Key press!");
-		}
+		focusPanel.addKeyUpHandler(handler);
 	}
 }

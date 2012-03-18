@@ -1,6 +1,7 @@
 package com.dacklabs.spookyaction.client.command;
 
 import com.dacklabs.spookyaction.shared.Command;
+import com.dacklabs.spookyaction.shared.EditingSurface;
 import com.dacklabs.spookyaction.shared.Command.CommandType;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyPressEvent;

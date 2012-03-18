@@ -31,7 +31,7 @@ public class CommandQueue implements CommandEventHandler {
 		return queuedCommands;
 	}
 
-	public Iterable<Command> popQueuedCommands() {
+	public ArrayList<Command> popQueuedCommands() {
 		ArrayList<Command> copy = queuedCommands;
 		queuedCommands = new ArrayList<Command>();
 		return copy;

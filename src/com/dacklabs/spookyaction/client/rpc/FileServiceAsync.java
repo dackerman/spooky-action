@@ -11,5 +11,5 @@ public interface FileServiceAsync {
 
 	void fromPath(String path, AsyncCallback<File> callback);
 
-	void updateFile(File file, ArrayList<Command> commands, AsyncCallback<UpdateResult> callback);
+	void updateFile(String path, ArrayList<Command> commands, AsyncCallback<UpdateResult> callback);
 }

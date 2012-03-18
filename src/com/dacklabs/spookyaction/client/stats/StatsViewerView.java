@@ -14,6 +14,7 @@ public class StatsViewerView extends Composite implements StatsViewer.Display {
 	interface StatsViewerViewUiBinder extends UiBinder<Widget, StatsViewerView> {
 	}
 
+	@UiField SpanElement numCommands;
 	@UiField SpanElement offset;
 	@UiField SpanElement type;
 	@UiField SpanElement data;
@@ -22,6 +23,11 @@ public class StatsViewerView extends Composite implements StatsViewer.Display {
 
 	public StatsViewerView() {
 		initWidget(uiBinder.createAndBindUi(this));
+	}
+
+	@Override
+	public void setNumberOfCommandsInQueue(int number) {
+		set(this.numCommands, String.valueOf(number));
 	}
 
 	@Override

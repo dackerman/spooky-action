@@ -5,6 +5,7 @@
 		
 	</ui:style>
 	<g:HTMLPanel>
+	  <p>Num Commands: <span ui:field="numCommands" /></p>
 	  <p>Last Command:</p>
 	  <p>Offset: <span ui:field="offset" /></p>
 	  <p>Type: <span ui:field="type" /></p>

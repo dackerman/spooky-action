@@ -3,20 +3,18 @@ package com.dacklabs.spookyaction.client.editor;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dacklabs.spookyaction.client.command.EditingSurface;
-import com.dacklabs.spookyaction.client.events.ErrorEvent;
-import com.dacklabs.spookyaction.client.events.InfoEvent;
 import com.dacklabs.spookyaction.client.events.OpenFileEvent;
 import com.dacklabs.spookyaction.client.events.OpenFileEventHandler;
-import com.dacklabs.spookyaction.client.rpc.FileServiceAsync;
+import com.dacklabs.spookyaction.client.events.SaveRequestedEvent;
+import com.dacklabs.spookyaction.shared.EditingSurface;
 import com.dacklabs.spookyaction.shared.File;
-import com.dacklabs.spookyaction.shared.UpdateResult;
+import com.dacklabs.spookyaction.shared.LineBasedEditor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
@@ -29,7 +27,7 @@ import com.google.inject.Inject;
  * 
  * @author "David Ackerman (david.w.ackerman@gmail.com)"
  */
-public class Editor implements IsWidget, EditingSurface {
+public class Editor implements IsWidget, EditingSurface, LineBasedEditor {
 
 	@ImplementedBy(EditorView.class)
 	public interface Display extends IsWidget {
@@ -55,7 +53,6 @@ public class Editor implements IsWidget, EditingSurface {
 	}
 
 	private final Display display;
-	private final FileServiceAsync fileService;
 
 	private File currentFile;
 	private final EventBus eventBus;
@@ -65,10 +62,9 @@ public class Editor implements IsWidget, EditingSurface {
 	private int cursorLocation = 0;
 
 	@Inject
-	public Editor(Display display, EventBus eventBus, FileServiceAsync fileService) {
+	public Editor(Display display, EventBus eventBus) {
 		this.display = display;
 		this.eventBus = eventBus;
-		this.fileService = fileService;
 
 		eventBus.addHandler(OpenFileEvent.TYPE, new NewFileHandler());
 		display.setSaveHandler(new SaveHandler());
@@ -100,6 +96,7 @@ public class Editor implements IsWidget, EditingSurface {
 		public void onFileRecieved(File file) {
 			currentFile = file;
 			setContent(file);
+			Window.setTitle(file.getFilename() + " (spooky action)");
 		}
 	}
 
@@ -107,20 +104,7 @@ public class Editor implements IsWidget, EditingSurface {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			// TODO(dackerman): Compress and send commands to the server.
-		}
-	}
-
-	private class OnFileUpdated implements AsyncCallback<UpdateResult> {
-
-		@Override
-		public void onSuccess(UpdateResult result) {
-			eventBus.fireEvent(new InfoEvent("Saved."));
-		}
-
-		@Override
-		public void onFailure(Throwable caught) {
-			eventBus.fireEvent(new ErrorEvent("Couldn't save: " + caught.getMessage()));
+			eventBus.fireEvent(new SaveRequestedEvent(currentFile));
 		}
 	}
 
@@ -144,13 +128,14 @@ public class Editor implements IsWidget, EditingSurface {
 	}
 
 	@Override
-	public String getLine(int lineNumber) {
-		return lines.get(lineNumber);
+	public StringBuffer getLine(int lineNumber) {
+		return new StringBuffer(lines.get(lineNumber));
 	}
 
 	@Override
-	public void updateLine(int lineNumber, String line) {
-		lines.set(lineNumber, line);
-		uiLines.get(lineNumber).setText(line);
+	public void updateLine(int lineNumber, StringBuffer line) {
+		String lineString = line.toString();
+		lines.set(lineNumber, lineString);
+		uiLines.get(lineNumber).setText(lineString);
 	}
 }

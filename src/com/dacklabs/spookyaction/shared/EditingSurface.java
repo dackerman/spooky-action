@@ -1,4 +1,4 @@
-package com.dacklabs.spookyaction.client.command;
+package com.dacklabs.spookyaction.shared;
 
 import com.dacklabs.spookyaction.client.editor.Editor;
 import com.google.gwt.event.dom.client.KeyPressHandler;
@@ -16,12 +16,12 @@ public interface EditingSurface {
 	/**
 	 * Gets the line of text at the given line number.
 	 */
-	String getLine(int lineNumber);
+	StringBuffer getLine(int lineNumber);
 
 	/**
 	 * Overwrites the text at the line number with the given data.
 	 */
-	void updateLine(int lineNumber, String line);
+	void updateLine(int lineNumber, StringBuffer line);
 
 	/**
 	 * Returns the cursor's current location.

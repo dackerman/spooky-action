@@ -1,6 +1,6 @@
 package com.dacklabs.spookyaction.client.command;
 
-import static org.junit.Assert.assertEquals;
+import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -50,6 +50,10 @@ public class UiUpdaterTest {
 		editingSurface.setContent("Bill Brasky was a wimp");
 		sendCommand(new Command(0, 11, CommandType.BACKSPACE, null, 11));
 		assertEquals("Bill Brasky", editingSurface.getLine(0));
+	}
+
+	private void assertEquals(String string, StringBuffer line) {
+		Assert.assertEquals(string, line.toString());
 	}
 
 	private void sendCommand(Command command) {

@@ -1,0 +1,58 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style type="com.dacklabs.spookyaction.client.notifications.NotificationSystemView.NotificationStyle">
+        .notificationBar {
+        	border-radius: 0px 0px 10px 10px;
+            left: 20%;
+            padding: 5px;
+            position: absolute;
+            right: 20%;
+            top: 0px;
+        }
+        
+        .info {
+            background-color: yellow;
+            color: black;
+        }
+
+        .error {
+            background-color: red;
+            color: white;
+        }
+        
+        .button {
+            background-color: #eee;
+            border: 1px solid #aaa;
+            border-radius: 2px;
+            color: black;
+            cursor: pointer;
+            font-size: 80%;
+            margin: 0px;
+            padding: 0px 5px 2px 5px;
+            position: absolute;
+        }
+        
+        .closeButton {
+        	right: 4px;
+        	top: 1px;
+            width: 20px;
+        }
+        
+        .detailsButton {
+        	right: 30px;
+        	top: 1px;
+        	width: 45px;
+        }  
+        
+        .details {
+        	font-weight: bold;
+        }
+    </ui:style>
+	<g:HTMLPanel styleName="{style.notificationBar}" ui:field="notificationBar">
+	   <g:Button styleName="{style.detailsButton} {style.button}" ui:field="detailsButton" text="details" />
+	   <g:Button styleName="{style.closeButton} {style.button}" ui:field="closeButton" text="X"/>
+	   <g:Label ui:field="text" />
+	   <g:HTML ui:field="details" styleName="{style.details}"></g:HTML>
+	</g:HTMLPanel>
+</ui:UiBinder> 

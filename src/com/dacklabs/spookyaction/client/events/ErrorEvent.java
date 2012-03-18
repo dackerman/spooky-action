@@ -8,12 +8,37 @@ public class ErrorEvent extends Event<ErrorEventHandler> {
 
 	private final String errorMessage;
 
+	private final Throwable throwable;
+
+	public ErrorEvent(String errorMessage, Throwable throwable) {
+		this.errorMessage = errorMessage;
+		this.throwable = throwable;
+	}
+
 	public ErrorEvent(String errorMessage) {
 		this.errorMessage = errorMessage;
+		this.throwable = null;
 	}
 
 	public ErrorEvent() {
 		this.errorMessage = null;
+		this.throwable = null;
+	}
+
+	public boolean hasMessage() {
+		return message() != null;
+	}
+
+	public String message() {
+		return errorMessage;
+	}
+
+	public boolean hasThrowable() {
+		return throwable() != null;
+	}
+
+	public Throwable throwable() {
+		return throwable;
 	}
 
 	@Override
@@ -23,6 +48,6 @@ public class ErrorEvent extends Event<ErrorEventHandler> {
 
 	@Override
 	protected void dispatch(ErrorEventHandler handler) {
-		handler.onError(errorMessage);
+		handler.onError(this);
 	}
 }

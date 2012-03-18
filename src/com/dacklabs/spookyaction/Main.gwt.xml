@@ -6,6 +6,8 @@
   
   <inherits name="com.google.gwt.inject.Inject"/>
   
+  <inherits name="com.google.gwt.resources.Resources" />
+  
   <source path='client'/>
   <source path='shared'/>
   

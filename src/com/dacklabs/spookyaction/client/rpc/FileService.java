@@ -14,5 +14,5 @@ public interface FileService extends RemoteService {
 
 	File fromPath(String path) throws FileUnavailableException;
 
-	UpdateResult updateFile(File file, ArrayList<Command> commands) throws FileUnavailableException;
+	UpdateResult updateFile(String path, ArrayList<Command> commands) throws FileUnavailableException;
 }

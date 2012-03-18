@@ -4,25 +4,29 @@ import com.google.web.bindery.event.shared.Event;
 
 public class InfoEvent extends Event<InfoEventHandler> {
 
-    public static final Type<InfoEventHandler> TYPE = new Type<InfoEventHandler>();
+	public static final Type<InfoEventHandler> TYPE = new Type<InfoEventHandler>();
 
-	private final String errorMessage;
+	private final String message;
 
-	public InfoEvent(String errorMessage) {
-		this.errorMessage = errorMessage;
+	public InfoEvent(String message) {
+		this.message = message;
 	}
 
 	public InfoEvent() {
-		this.errorMessage = null;
+		this.message = null;
+	}
+
+	public String message() {
+		return message;
 	}
 
 	@Override
-    public com.google.web.bindery.event.shared.Event.Type<InfoEventHandler> getAssociatedType() {
+	public com.google.web.bindery.event.shared.Event.Type<InfoEventHandler> getAssociatedType() {
 		return TYPE;
 	}
 
 	@Override
-    protected void dispatch(InfoEventHandler handler) {
-		handler.onInfo(errorMessage);
+	protected void dispatch(InfoEventHandler handler) {
+		handler.onInfo(this);
 	}
 }
