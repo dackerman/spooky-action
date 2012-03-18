@@ -6,6 +6,7 @@ import java.util.List;
 import com.dacklabs.spookyaction.client.events.OpenFileEvent;
 import com.dacklabs.spookyaction.client.events.OpenFileEventHandler;
 import com.dacklabs.spookyaction.client.events.SaveRequestedEvent;
+import com.dacklabs.spookyaction.client.main.Page;
 import com.dacklabs.spookyaction.shared.EditingSurface;
 import com.dacklabs.spookyaction.shared.File;
 import com.dacklabs.spookyaction.shared.LineBasedEditor;
@@ -14,7 +15,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
@@ -47,8 +47,14 @@ public class Editor implements IsWidget, EditingSurface, LineBasedEditor {
 		 */
 		void setSaveHandler(ClickHandler handler);
 
+		/**
+		 * Adds a handler for user keypresses.
+		 */
 		void addKeyPressHandler(KeyPressHandler handler);
 
+		/**
+		 * Adds a handler for non-character key events.
+		 */
 		void addKeyUpHandler(KeyUpHandler handler);
 	}
 
@@ -61,10 +67,13 @@ public class Editor implements IsWidget, EditingSurface, LineBasedEditor {
 	private final List<HasText> uiLines = new ArrayList<HasText>();
 	private int cursorLocation = 0;
 
+	private final Page page;
+
 	@Inject
-	public Editor(Display display, EventBus eventBus) {
+	public Editor(Display display, EventBus eventBus, Page page) {
 		this.display = display;
 		this.eventBus = eventBus;
+		this.page = page;
 
 		eventBus.addHandler(OpenFileEvent.TYPE, new NewFileHandler());
 		display.setSaveHandler(new SaveHandler());
@@ -96,7 +105,7 @@ public class Editor implements IsWidget, EditingSurface, LineBasedEditor {
 		public void onFileRecieved(File file) {
 			currentFile = file;
 			setContent(file);
-			Window.setTitle(file.getFilename() + " (spooky action)");
+			page.setWindowTitle(file.getFilename() + " (spooky action)");
 		}
 	}
 

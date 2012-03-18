@@ -21,14 +21,24 @@ public class UpdateResult implements IsSerializable {
 		failedCommands = new ArrayList<FailedCommand>();
 	}
 
+	/**
+	 * @return true if there are no failed commands.
+	 */
 	public boolean wasSuccessful() {
 		return failedCommands.isEmpty();
 	}
 
+	/**
+	 * @return all the commands that failed on the server.
+	 */
 	public Iterable<FailedCommand> failedCommands() {
 		return failedCommands;
 	}
 
+	/**
+	 * Represents a single failed command and the reason it failed. This is so the frontend can show
+	 * the user what happend and potentially resync the backend file.
+	 */
 	public static class FailedCommand implements IsSerializable {
 		public final Command command;
 		public final String reason;
@@ -39,6 +49,9 @@ public class UpdateResult implements IsSerializable {
 		}
 	}
 
+	/**
+	 * Builder for {@link UpdateResult}.
+	 */
 	public static class Builder {
 		private UpdateResult r = new UpdateResult();
 
