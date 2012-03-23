@@ -2,11 +2,11 @@ package com.dacklabs.spookyaction.client.command;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import com.dacklabs.spookyaction.client.testing.StubEditingSurface;
 import com.dacklabs.spookyaction.shared.Command;
 import com.dacklabs.spookyaction.shared.Command.CommandType;
 import com.google.gwt.event.dom.client.KeyPressEvent;
@@ -38,10 +38,6 @@ public class KeyToCommandConverterTest implements CommandEventHandler {
 	private void assertExpectedCommandWas(Command expectedCommand) {
 		assertNotNull("No command was fired.", commandReturned);
 		assertEquals(expectedCommand, commandReturned);
-	}
-
-	private void assertNoCommand() {
-		assertNull("No command should have been fired. " + commandReturned, commandReturned);
 	}
 
 	private void userPressesKey(char key) {

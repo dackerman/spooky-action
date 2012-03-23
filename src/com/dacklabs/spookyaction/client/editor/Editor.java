@@ -7,13 +7,10 @@ import com.dacklabs.spookyaction.client.events.FileLoadingEvent;
 import com.dacklabs.spookyaction.client.events.FileLoadingEventHandler;
 import com.dacklabs.spookyaction.client.events.OpenFileEvent;
 import com.dacklabs.spookyaction.client.events.OpenFileEventHandler;
-import com.dacklabs.spookyaction.client.events.SaveRequestedEvent;
 import com.dacklabs.spookyaction.client.main.Page;
 import com.dacklabs.spookyaction.shared.EditingSurface;
 import com.dacklabs.spookyaction.shared.File;
 import com.dacklabs.spookyaction.shared.LineBasedEditor;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
@@ -43,20 +40,17 @@ public class Editor implements IsWidget, EditingSurface, LineBasedEditor {
 		void clearWindow();
 
 		/**
-		 * Sets the callback for when the user clicks "save".
-		 */
-		void setSaveHandler(ClickHandler handler);
-
-		/**
 		 * Show that a file is loading in the editor window.
 		 */
 		void showLoading(String path);
+
+		/**
+		 * Sets the style of this widget.
+		 */
+		void setStyleName(String style);
 	}
 
 	private final Display display;
-
-	private File currentFile;
-	private final EventBus eventBus;
 
 	private final List<EditorLine> uiLines = new ArrayList<EditorLine>();
 	private final Provider<EditorLine> lineFactory;
@@ -68,13 +62,11 @@ public class Editor implements IsWidget, EditingSurface, LineBasedEditor {
 	@Inject
 	public Editor(Display display, EventBus eventBus, Page page, Provider<EditorLine> lineFactory) {
 		this.display = display;
-		this.eventBus = eventBus;
 		this.page = page;
 		this.lineFactory = lineFactory;
 
 		eventBus.addHandler(FileLoadingEvent.TYPE, new LoadingScreenHandler());
 		eventBus.addHandler(OpenFileEvent.TYPE, new NewFileHandler());
-		display.setSaveHandler(new SaveHandler());
 	}
 
 	@Override
@@ -86,7 +78,6 @@ public class Editor implements IsWidget, EditingSurface, LineBasedEditor {
 
 		@Override
 		public void onFileRecieved(File file) {
-			currentFile = file;
 			setContent(file);
 			page.setWindowTitle(file.getFilename() + " (spooky action)");
 		}
@@ -97,14 +88,6 @@ public class Editor implements IsWidget, EditingSurface, LineBasedEditor {
 		@Override
 		public void onFileLoading(FileLoadingEvent event) {
 			display.showLoading(event.getPath());
-		}
-	}
-
-	private class SaveHandler implements ClickHandler {
-
-		@Override
-		public void onClick(ClickEvent event) {
-			eventBus.fireEvent(new SaveRequestedEvent(currentFile));
 		}
 	}
 
@@ -145,5 +128,9 @@ public class Editor implements IsWidget, EditingSurface, LineBasedEditor {
 	public void updateLine(int lineNumber, StringBuffer line) {
 		String lineString = line.toString();
 		uiLines.get(lineNumber).setText(lineString);
+	}
+
+	public void setStyleName(String style) {
+		display.setStyleName(style);
 	}
 }

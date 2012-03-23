@@ -8,6 +8,5 @@ public class CommandModule extends AbstractGinModule {
 	@Override
 	protected void configure() {
 		bind(Editor.class).asEagerSingleton();
-		bind(CommandQueue.class).asEagerSingleton();
 	}
 }

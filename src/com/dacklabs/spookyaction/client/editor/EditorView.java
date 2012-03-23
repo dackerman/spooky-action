@@ -1,10 +1,8 @@
 package com.dacklabs.spookyaction.client.editor;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
@@ -24,7 +22,6 @@ public class EditorView extends Composite implements Editor.Display {
 	interface EditorViewUiBinder extends UiBinder<Widget, EditorView> {
 	}
 
-	@UiField Button saveButton;
 	@UiField FocusPanel focusPanel;
 	@UiField FlowPanel editorPanel;
 	@UiField Image loadingImage;
@@ -32,11 +29,6 @@ public class EditorView extends Composite implements Editor.Display {
 	@Inject
 	public EditorView() {
 		initWidget(uiBinder.createAndBindUi(this));
-	}
-
-	@Override
-	public void setSaveHandler(ClickHandler handler) {
-		saveButton.addClickHandler(handler);
 	}
 
 	@Override

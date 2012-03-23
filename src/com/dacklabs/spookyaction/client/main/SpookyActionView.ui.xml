@@ -4,34 +4,37 @@
 	xmlns:client="urn:import:com.dacklabs.spookyaction.client"
     xmlns:notifications="urn:import:com.dacklabs.spookyaction.client.notifications">
 	<ui:style>
-		.left-container {
-			height: 100%;
-			left: 3px;
-			position: absolute;
-			right: 210px;
-		}
-		
-		.right-container {
-            height: 100%;
-            position: absolute;
-            right: 3px;
-            width: 200px;
-        }
+	  .topBar {
+        height: 90px;
+        left: 2px;
+        position: absolute;
+        right: 2px;
+        top: 0px;
+	  }
+	  
+	  .editor {
+	  	bottom: 2px;
+	  	left: 2px;
+	  	position: absolute;
+	  	right: 2px;
+	  	top: 80px;
+	  }
+	  
+      .saveButton {
+        position: absolute;
+		right: 2px;
+		top: 2px;
+	  }
 	</ui:style>
 	<g:HTMLPanel>
 	  <notifications:NotificationSystem ui:field="notificationSystem" />
-	  <notifications:SyncStatus ui:field="syncStatus" />
 	  
-	  <p><strong>Spooky Action at a Distance</strong>: the editor for ultra-low bandwidth situations.</p>
-	  
-	  <g:HTMLPanel addStyleNames="{style.left-container}">
+	  <g:HTMLPanel styleName="{style.topBar}">
+        <p><strong>Spooky Action at a Distance</strong>: the editor for ultra-low bandwidth situations.</p>
+      
         <client:fileselector.FileSelector ui:field="fileSelector" />
-        <client:editor.Editor ui:field="editor" />
+        <client:editor.SaveButton ui:field="saveButton" styleName="{style.saveButton}"/>
 	  </g:HTMLPanel>
-	  
-	  <g:HTMLPanel addStyleNames="{style.right-container}" >
-	    <h2>Command Stats</h2>
-	    <client:stats.StatsViewer ui:field="stats" />
-	  </g:HTMLPanel>
+	  <client:editor.Editor ui:field="editor" styleName="{style.editor}"/>
 	</g:HTMLPanel>
 </ui:UiBinder> 

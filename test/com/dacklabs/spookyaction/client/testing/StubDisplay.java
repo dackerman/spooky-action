@@ -1,17 +1,16 @@
-package com.dacklabs.spookyaction.client.editor;
+package com.dacklabs.spookyaction.client.testing;
 
 import java.util.List;
 
 import com.dacklabs.spookyaction.client.editor.Editor.Display;
+import com.dacklabs.spookyaction.client.editor.EditorLine;
 import com.google.common.collect.Lists;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.ui.Widget;
 
 public class StubDisplay implements Display {
 
-	public ClickHandler clickHandler;
 	public KeyPressHandler keyPressHandler;
 	public KeyUpHandler keyUpHandler;
 
@@ -25,11 +24,6 @@ public class StubDisplay implements Display {
 	@Override
 	public void clearWindow() {
 		lines.clear();
-	}
-
-	@Override
-	public void setSaveHandler(ClickHandler handler) {
-		this.clickHandler = handler;
 	}
 
 	public String line(int lineNumber) {
@@ -50,5 +44,9 @@ public class StubDisplay implements Display {
 
 	@Override
 	public void showLoading(String path) {
+	}
+
+	@Override
+	public void setStyleName(String style) {
 	}
 }

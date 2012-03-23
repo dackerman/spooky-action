@@ -1,10 +1,9 @@
 package com.dacklabs.spookyaction.client.main;
 
 import com.dacklabs.spookyaction.client.editor.Editor;
+import com.dacklabs.spookyaction.client.editor.SaveButton;
 import com.dacklabs.spookyaction.client.fileselector.FileSelector;
 import com.dacklabs.spookyaction.client.notifications.NotificationSystem;
-import com.dacklabs.spookyaction.client.notifications.SyncStatus;
-import com.dacklabs.spookyaction.client.stats.StatsViewer;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -21,18 +20,16 @@ public class SpookyActionView extends Composite implements SpookyAction.Display 
 
 	@UiField(provided = true) final FileSelector fileSelector;
 	@UiField(provided = true) final Editor editor;
-	@UiField(provided = true) final StatsViewer stats;
+	@UiField(provided = true) final SaveButton saveButton;
 	@UiField(provided = true) final NotificationSystem notificationSystem;
-	@UiField(provided = true) final SyncStatus syncStatus;
 
 	@Inject
-	public SpookyActionView(FileSelector fileSelector, Editor editor, StatsViewer stats,
-	    NotificationSystem notificationSystem, SyncStatus syncStatus) {
+	public SpookyActionView(FileSelector fileSelector, Editor editor, SaveButton saveButton,
+	    NotificationSystem notificationSystem) {
 		this.fileSelector = fileSelector;
 		this.editor = editor;
-		this.stats = stats;
+		this.saveButton = saveButton;
 		this.notificationSystem = notificationSystem;
-		this.syncStatus = syncStatus;
 
 		initWidget(uiBinder.createAndBindUi(this));
 	}
@@ -40,10 +37,5 @@ public class SpookyActionView extends Composite implements SpookyAction.Display 
 	@Override
 	public Editor getEditor() {
 		return editor;
-	}
-
-	@Override
-	public StatsViewer getStats() {
-		return stats;
 	}
 }

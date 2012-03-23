@@ -18,10 +18,6 @@
 			padding: 5px;
 		}
 		
-		.saveButton {
-			float: right;
-		}
-		
 		.loadingImage {
 			left: 50px;
 			position: absolute;
@@ -30,7 +26,6 @@
 	</ui:style>
 	<g:FlowPanel styleName="{style.editor}">
 		<g:Image visible="false" ui:field="loadingImage" resource="{res.ajaxLoader}" styleName="{style.loadingImage}" />
-		<g:Button ui:field="saveButton" text="Save" addStyleNames="{style.saveButton}" />
 		<g:FocusPanel ui:field="focusPanel" styleName="{style.editorTxt}" >
     	  <g:FlowPanel ui:field="editorPanel" />
 		</g:FocusPanel>

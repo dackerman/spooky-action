@@ -1,4 +1,4 @@
-package com.dacklabs.spookyaction.client.command;
+package com.dacklabs.spookyaction.client.testing;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import com.dacklabs.spookyaction.shared.EditingSurface;
 import com.dacklabs.spookyaction.shared.LineBasedEditor;
 import com.google.gwt.thirdparty.guava.common.collect.Lists;
 
-class StubEditingSurface implements EditingSurface, LineBasedEditor {
+public class StubEditingSurface implements EditingSurface, LineBasedEditor {
 
 	private final List<StringBuffer> content = Lists.newArrayList();
 

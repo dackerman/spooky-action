@@ -1,4 +1,4 @@
-package com.dacklabs.spookyaction.client.editor;
+package com.dacklabs.spookyaction.client.testing;
 
 import com.dacklabs.spookyaction.client.main.Page;
 

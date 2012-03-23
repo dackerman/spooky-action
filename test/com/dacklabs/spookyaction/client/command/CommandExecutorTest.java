@@ -5,6 +5,7 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.dacklabs.spookyaction.client.testing.StubEditingSurface;
 import com.dacklabs.spookyaction.shared.Command;
 import com.dacklabs.spookyaction.shared.Command.CommandType;
 import com.dacklabs.spookyaction.shared.CommandExecutor;

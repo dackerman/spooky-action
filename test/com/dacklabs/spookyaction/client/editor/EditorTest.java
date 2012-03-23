@@ -1,16 +1,14 @@
 package com.dacklabs.spookyaction.client.editor;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import com.dacklabs.spookyaction.client.events.OpenFileEvent;
-import com.dacklabs.spookyaction.client.events.SaveRequestedEvent;
-import com.dacklabs.spookyaction.client.events.SaveRequestedEventHandler;
+import com.dacklabs.spookyaction.client.testing.StubDisplay;
+import com.dacklabs.spookyaction.client.testing.StubPage;
 import com.dacklabs.spookyaction.shared.File;
-import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
@@ -80,15 +78,6 @@ public class EditorTest {
 		assertDisplayIs("blah", "blerg", "blammo", "blow");
 	}
 
-	@Test
-	public void testClickSave_FiresSaveRequestedEventWithTheCorrectFile() {
-		SaveRequestedEventCatcher handler = listenForSaveRequestedEvent();
-		fireOpenFileEvent("myfile", "data");
-		clickSaveButton();
-
-		assertTrue("SaveRequestedEvent was never fired", handler.saveRequested);
-	}
-
 	/**
 	 * Loops through stub display and verifies that each line matches the expected lines. Also
 	 * verifies that the number of lines is the same (in case the display has more lines than
@@ -102,33 +91,8 @@ public class EditorTest {
 		assertEquals("Display has wrong number of lines.", lines.length, stubDisplay.lines());
 	}
 
-	private void clickSaveButton() {
-		stubDisplay.clickHandler.onClick(stubClickEvent());
-	}
-
-	private ClickEvent stubClickEvent() {
-		return new ClickEvent() {
-		};
-	}
-
 	private void fireOpenFileEvent(String filename, String content) {
 		eventBus.fireEvent(new OpenFileEvent(new File(filename, content)));
-	}
-
-	private SaveRequestedEventCatcher listenForSaveRequestedEvent() {
-		SaveRequestedEventCatcher handler = new SaveRequestedEventCatcher();
-		eventBus.addHandler(SaveRequestedEvent.TYPE, handler);
-		return handler;
-	}
-
-	private static class SaveRequestedEventCatcher implements SaveRequestedEventHandler {
-
-		boolean saveRequested = false;
-
-		@Override
-		public void onSaveRequested(SaveRequestedEvent event) {
-			saveRequested = true;
-		}
 	}
 
 	private static class StubLineProvider implements Provider<EditorLine> {
