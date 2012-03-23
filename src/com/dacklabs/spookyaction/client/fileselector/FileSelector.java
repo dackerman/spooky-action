@@ -1,6 +1,7 @@
 package com.dacklabs.spookyaction.client.fileselector;
 
 import com.dacklabs.spookyaction.client.events.ErrorEvent;
+import com.dacklabs.spookyaction.client.events.FileLoadingEvent;
 import com.dacklabs.spookyaction.client.events.OpenFileEvent;
 import com.dacklabs.spookyaction.client.rpc.FileServiceAsync;
 import com.dacklabs.spookyaction.shared.File;
@@ -21,10 +22,6 @@ public class FileSelector implements IsWidget {
 		String currentPathText();
 
 		void onFileRequested(ClickHandler clickHandler);
-
-		void showLoadingMessage();
-
-		void hideLoadingMessage();
 	}
 
 	private final Display display;
@@ -44,7 +41,7 @@ public class FileSelector implements IsWidget {
 
 		@Override
 		public void onClick(ClickEvent unused) {
-			display.showLoadingMessage();
+			eventBus.fireEvent(new FileLoadingEvent(display.currentPathText()));
 			fileService.fromPath(display.currentPathText(), new OnFileRecieved());
 		}
 	}
@@ -53,13 +50,11 @@ public class FileSelector implements IsWidget {
 
 		@Override
 		public void onSuccess(File file) {
-			display.hideLoadingMessage();
 			eventBus.fireEvent(new OpenFileEvent(file));
 		}
 
 		@Override
 		public void onFailure(Throwable caught) {
-			display.hideLoadingMessage();
 			eventBus.fireEvent(new ErrorEvent("Woah there, couldn't load your file.", caught));
 		}
 	}

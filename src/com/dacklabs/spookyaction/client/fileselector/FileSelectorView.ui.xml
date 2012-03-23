@@ -5,10 +5,7 @@
 		
 	</ui:style>
 	<g:HTMLPanel>
-	   <form>
-        <input type="text" ui:field="pathSelector" />
-        <g:Button text="Edit" ui:field="submitButton"/>
-        <span ui:field="loadingText" style="display:none">Loading files...</span>
-	   </form>
+      <input type="text" ui:field="pathSelector" />
+      <g:Button text="Edit" ui:field="submitButton"/>
 	</g:HTMLPanel>
 </ui:UiBinder> 

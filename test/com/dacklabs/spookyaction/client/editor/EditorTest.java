@@ -11,20 +11,28 @@ import com.dacklabs.spookyaction.client.events.SaveRequestedEvent;
 import com.dacklabs.spookyaction.client.events.SaveRequestedEventHandler;
 import com.dacklabs.spookyaction.shared.File;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.event.shared.GwtEvent;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.gwt.user.client.ui.Widget;
+import com.google.inject.Provider;
 
 public class EditorTest {
 
 	private final StubDisplay stubDisplay = new StubDisplay();
 	private final StubPage stubPage = new StubPage();
 	private final EventBus eventBus = new SimpleEventBus();
+	private final Provider<EditorLine> stubProvider = new StubLineProvider();
 
 	private Editor editor;
 
 	@Before
 	public void setUp() {
-		editor = new Editor(stubDisplay, eventBus, stubPage);
+		editor = new Editor(stubDisplay, eventBus, stubPage, stubProvider);
 	}
 
 	@Test
@@ -120,6 +128,72 @@ public class EditorTest {
 		@Override
 		public void onSaveRequested(SaveRequestedEvent event) {
 			saveRequested = true;
+		}
+	}
+
+	private static class StubLineProvider implements Provider<EditorLine> {
+
+		@Override
+		public EditorLine get() {
+			return new EditorLine(new StubLineDisplay());
+		}
+	}
+
+	private static class StubLineDisplay implements EditorLine.Display {
+
+		private String text;
+
+		@Override
+		public Widget asWidget() {
+			return null;
+		}
+
+		@Override
+		public HandlerRegistration addKeyUpHandler(KeyUpHandler handler) {
+			return null;
+		}
+
+		@Override
+		public void fireEvent(GwtEvent<?> event) {
+		}
+
+		@Override
+		public HandlerRegistration addKeyPressHandler(KeyPressHandler handler) {
+			return null;
+		}
+
+		@Override
+		public String getText() {
+			return text;
+		}
+
+		@Override
+		public void setText(String text) {
+			this.text = text;
+		}
+
+		@Override
+		public HandlerRegistration addClickHandler(ClickHandler handler) {
+			return null;
+		}
+
+		@Override
+		public String getHTML() {
+			return text;
+		}
+
+		@Override
+		public void setHTML(String html) {
+			text = html;
+		}
+
+		@Override
+		public int getCursorPos() {
+			return 0;
+		}
+
+		@Override
+		public void setCursorPos(int pos) {
 		}
 	}
 }

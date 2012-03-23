@@ -20,6 +20,7 @@
 	</ui:style>
 	<g:HTMLPanel>
 	  <notifications:NotificationSystem ui:field="notificationSystem" />
+	  <notifications:SyncStatus ui:field="syncStatus" />
 	  
 	  <p><strong>Spooky Action at a Distance</strong>: the editor for ultra-low bandwidth situations.</p>
 	  

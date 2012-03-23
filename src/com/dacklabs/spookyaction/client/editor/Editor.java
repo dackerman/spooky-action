@@ -3,6 +3,8 @@ package com.dacklabs.spookyaction.client.editor;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dacklabs.spookyaction.client.events.FileLoadingEvent;
+import com.dacklabs.spookyaction.client.events.FileLoadingEventHandler;
 import com.dacklabs.spookyaction.client.events.OpenFileEvent;
 import com.dacklabs.spookyaction.client.events.OpenFileEventHandler;
 import com.dacklabs.spookyaction.client.events.SaveRequestedEvent;
@@ -12,14 +14,12 @@ import com.dacklabs.spookyaction.shared.File;
 import com.dacklabs.spookyaction.shared.LineBasedEditor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyPressHandler;
-import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.ImplementedBy;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 /**
  * The main editor window. Displays the file in a text area and then listens for events on it to
@@ -35,7 +35,7 @@ public class Editor implements IsWidget, EditingSurface, LineBasedEditor {
 		/**
 		 * Creates a new line in the editor and returns it.
 		 */
-		HasText newLine();
+		void addLine(EditorLine line);
 
 		/**
 		 * Clears all lines from the editor.
@@ -48,14 +48,9 @@ public class Editor implements IsWidget, EditingSurface, LineBasedEditor {
 		void setSaveHandler(ClickHandler handler);
 
 		/**
-		 * Adds a handler for user keypresses.
+		 * Show that a file is loading in the editor window.
 		 */
-		void addKeyPressHandler(KeyPressHandler handler);
-
-		/**
-		 * Adds a handler for non-character key events.
-		 */
-		void addKeyUpHandler(KeyUpHandler handler);
+		void showLoading(String path);
 	}
 
 	private final Display display;
@@ -63,40 +58,28 @@ public class Editor implements IsWidget, EditingSurface, LineBasedEditor {
 	private File currentFile;
 	private final EventBus eventBus;
 
-	private final List<String> lines = new ArrayList<String>();
-	private final List<HasText> uiLines = new ArrayList<HasText>();
-	private int cursorLocation = 0;
+	private final List<EditorLine> uiLines = new ArrayList<EditorLine>();
+	private final Provider<EditorLine> lineFactory;
 
 	private final Page page;
 
+	private EditorEventHandler handler;
+
 	@Inject
-	public Editor(Display display, EventBus eventBus, Page page) {
+	public Editor(Display display, EventBus eventBus, Page page, Provider<EditorLine> lineFactory) {
 		this.display = display;
 		this.eventBus = eventBus;
 		this.page = page;
+		this.lineFactory = lineFactory;
 
+		eventBus.addHandler(FileLoadingEvent.TYPE, new LoadingScreenHandler());
 		eventBus.addHandler(OpenFileEvent.TYPE, new NewFileHandler());
 		display.setSaveHandler(new SaveHandler());
 	}
 
 	@Override
-	public void addKeyPressHandler(KeyPressHandler handler) {
-		display.addKeyPressHandler(handler);
-	}
-
-	@Override
-	public void addKeyUpHandler(KeyUpHandler handler) {
-		display.addKeyUpHandler(handler);
-	}
-
-	@Override
-	public int getCursorLocation() {
-		return cursorLocation;
-	}
-
-	@Override
-	public void setCursorLocation(int cursorLocation) {
-		this.cursorLocation = cursorLocation;
+	public void setEditorEventHandler(EditorEventHandler handler) {
+		this.handler = handler;
 	}
 
 	private class NewFileHandler implements OpenFileEventHandler {
@@ -109,6 +92,14 @@ public class Editor implements IsWidget, EditingSurface, LineBasedEditor {
 		}
 	}
 
+	private class LoadingScreenHandler implements FileLoadingEventHandler {
+
+		@Override
+		public void onFileLoading(FileLoadingEvent event) {
+			display.showLoading(event.getPath());
+		}
+	}
+
 	private class SaveHandler implements ClickHandler {
 
 		@Override
@@ -118,16 +109,25 @@ public class Editor implements IsWidget, EditingSurface, LineBasedEditor {
 	}
 
 	private void setContent(File file) {
-		lines.clear();
+		unregisterHandlers();
 		uiLines.clear();
 		display.clearWindow();
 
 		String[] fileLines = file.getContent().split("\n");
+		int lineNumber = 0;
 		for (String line : fileLines) {
-			HasText newLine = display.newLine();
+			EditorLine newLine = lineFactory.get();
 			newLine.setText(line);
-			lines.add(line);
+			newLine.setLineNumber(lineNumber++);
+			newLine.addLineHandler(handler);
+			display.addLine(newLine);
 			uiLines.add(newLine);
+		}
+	}
+
+	private void unregisterHandlers() {
+		for (EditorLine line : uiLines) {
+			line.unregisterHandlers();
 		}
 	}
 
@@ -138,13 +138,12 @@ public class Editor implements IsWidget, EditingSurface, LineBasedEditor {
 
 	@Override
 	public StringBuffer getLine(int lineNumber) {
-		return new StringBuffer(lines.get(lineNumber));
+		return new StringBuffer(uiLines.get(lineNumber).getText());
 	}
 
 	@Override
 	public void updateLine(int lineNumber, StringBuffer line) {
 		String lineString = line.toString();
-		lines.set(lineNumber, lineString);
 		uiLines.get(lineNumber).setText(lineString);
 	}
 }

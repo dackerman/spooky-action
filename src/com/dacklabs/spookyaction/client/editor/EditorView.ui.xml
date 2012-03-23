@@ -2,13 +2,14 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
 	xmlns:editor="urn:import:com.dacklabs.spookyaction.client.editor">
-	<ui:style ui:field="style" type="com.dacklabs.spookyaction.client.editor.EditorView.Style">
+	<ui:with field='res' type='com.dacklabs.spookyaction.client.resources.ResourceBundle'/>
+	<ui:style ui:field="style">
 		.editor {
 			height: 100%;
 			position: relative;
 		}
 		
-		.editor-txt {
+		.editorTxt {
 			background-color: #404040;
 			color: #CAE682;
 			font-family: "Ubuntu Mono",monospace;
@@ -17,17 +18,20 @@
 			padding: 5px;
 		}
 		
-		.save-button {
+		.saveButton {
 			float: right;
 		}
 		
-		.line {
-			display: block;
+		.loadingImage {
+			left: 50px;
+			position: absolute;
+			top: 50px;
 		}
 	</ui:style>
 	<g:FlowPanel styleName="{style.editor}">
-		<g:Button ui:field="saveButton" text="Save" addStyleNames="{style.save-button}" />
-		<g:FocusPanel ui:field="focusPanel" styleName="{style.editor-txt}" >
+		<g:Image visible="false" ui:field="loadingImage" resource="{res.ajaxLoader}" styleName="{style.loadingImage}" />
+		<g:Button ui:field="saveButton" text="Save" addStyleNames="{style.saveButton}" />
+		<g:FocusPanel ui:field="focusPanel" styleName="{style.editorTxt}" >
     	  <g:FlowPanel ui:field="editorPanel" />
 		</g:FocusPanel>
 	</g:FlowPanel>

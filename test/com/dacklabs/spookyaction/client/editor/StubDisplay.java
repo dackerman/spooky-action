@@ -7,7 +7,6 @@ import com.google.common.collect.Lists;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.Widget;
 
 public class StubDisplay implements Display {
@@ -16,13 +15,11 @@ public class StubDisplay implements Display {
 	public KeyPressHandler keyPressHandler;
 	public KeyUpHandler keyUpHandler;
 
-	private final List<StubLine> lines = Lists.newArrayList();
+	private final List<EditorLine> lines = Lists.newArrayList();
 
 	@Override
-	public HasText newLine() {
-		StubLine line = new StubLine("");
+	public void addLine(EditorLine line) {
 		lines.add(line);
-		return line;
 	}
 
 	@Override
@@ -33,16 +30,6 @@ public class StubDisplay implements Display {
 	@Override
 	public void setSaveHandler(ClickHandler handler) {
 		this.clickHandler = handler;
-	}
-
-	@Override
-	public void addKeyPressHandler(KeyPressHandler handler) {
-		this.keyPressHandler = handler;
-	}
-
-	@Override
-	public void addKeyUpHandler(KeyUpHandler handler) {
-		this.keyUpHandler = handler;
 	}
 
 	public String line(int lineNumber) {
@@ -56,27 +43,12 @@ public class StubDisplay implements Display {
 		return lines.size();
 	}
 
-	public static class StubLine implements HasText {
-
-		private String text;
-
-		public StubLine(String text) {
-			setText(text);
-		}
-
-		@Override
-		public String getText() {
-			return text;
-		}
-
-		@Override
-		public void setText(String text) {
-			this.text = text;
-		}
-	}
-
 	@Override
 	public Widget asWidget() {
 		return null;
+	}
+
+	@Override
+	public void showLoading(String path) {
 	}
 }

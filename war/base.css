@@ -27,7 +27,17 @@ button:hover {
 	border: 1px solid #bbb;
 }
 
-input {
-	font-family: "Ubuntu", sans-serif;
-    font-size: 12px;
+.textBoxLine {
+    background-color: transparent;
+    border: none;
+    color: inherit;
+    display: block;
+    font: inherit;
+    width: 95%;
+}
+
+.textBoxLine:focus {
+	background-color: #333;
+	border: none;
+	color: white;
 }

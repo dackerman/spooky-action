@@ -13,7 +13,7 @@ import com.dacklabs.spookyaction.shared.CommandExecutor;
 import com.dacklabs.spookyaction.shared.File;
 import com.dacklabs.spookyaction.shared.FileUnavailableException;
 import com.dacklabs.spookyaction.shared.UpdateResult;
-import com.google.gwt.thirdparty.guava.common.collect.Lists;
+import com.google.common.collect.Lists;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 @SuppressWarnings("serial")

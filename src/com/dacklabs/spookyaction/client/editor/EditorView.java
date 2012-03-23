@@ -2,17 +2,13 @@ package com.dacklabs.spookyaction.client.editor;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyPressHandler;
-import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.HasText;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 
@@ -28,17 +24,10 @@ public class EditorView extends Composite implements Editor.Display {
 	interface EditorViewUiBinder extends UiBinder<Widget, EditorView> {
 	}
 
-	/**
-	 * Represents the CSS of the editor.
-	 */
-	public interface Style extends CssResource {
-		String line();
-	}
-
 	@UiField Button saveButton;
 	@UiField FocusPanel focusPanel;
 	@UiField FlowPanel editorPanel;
-	@UiField Style style;
+	@UiField Image loadingImage;
 
 	@Inject
 	public EditorView() {
@@ -51,25 +40,18 @@ public class EditorView extends Composite implements Editor.Display {
 	}
 
 	@Override
-	public HasText newLine() {
-		Label label = new Label();
-		label.setStyleName(style.line());
-		editorPanel.add(label);
-		return label;
+	public void addLine(EditorLine line) {
+		editorPanel.add(line);
 	}
 
 	@Override
 	public void clearWindow() {
+		loadingImage.setVisible(false);
 		editorPanel.clear();
 	}
 
 	@Override
-	public void addKeyPressHandler(KeyPressHandler handler) {
-		focusPanel.addKeyPressHandler(handler);
-	}
-
-	@Override
-	public void addKeyUpHandler(KeyUpHandler handler) {
-		focusPanel.addKeyUpHandler(handler);
+	public void showLoading(String path) {
+		loadingImage.setVisible(true);
 	}
 }

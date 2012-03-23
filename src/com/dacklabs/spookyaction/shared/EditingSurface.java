@@ -1,8 +1,7 @@
 package com.dacklabs.spookyaction.shared;
 
 import com.dacklabs.spookyaction.client.editor.Editor;
-import com.google.gwt.event.dom.client.KeyPressHandler;
-import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.dacklabs.spookyaction.client.editor.EditorEventHandler;
 import com.google.inject.ImplementedBy;
 
 /**
@@ -24,22 +23,7 @@ public interface EditingSurface {
 	void updateLine(int lineNumber, StringBuffer line);
 
 	/**
-	 * Returns the cursor's current location.
+	 * Sets the event handlers for this editor.
 	 */
-	int getCursorLocation();
-
-	/**
-	 * Sets the cursor position of the editing surface.
-	 */
-	void setCursorLocation(int cursorLocation);
-
-	/**
-	 * Sets the handler for key presses.
-	 */
-	void addKeyPressHandler(KeyPressHandler keyPressHandler);
-
-	/**
-	 * Sets the handler for when special keys have been pressed.
-	 */
-	void addKeyUpHandler(KeyUpHandler keyUpHandler);
+	void setEditorEventHandler(EditorEventHandler handler);
 }

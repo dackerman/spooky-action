@@ -1,7 +1,7 @@
 package com.dacklabs.spookyaction.client.command;
 
 import com.dacklabs.spookyaction.client.events.ErrorEvent;
-import com.dacklabs.spookyaction.client.events.InfoEvent;
+import com.dacklabs.spookyaction.client.events.FileSavedEvent;
 import com.dacklabs.spookyaction.client.events.SaveRequestedEvent;
 import com.dacklabs.spookyaction.client.events.SaveRequestedEventHandler;
 import com.dacklabs.spookyaction.client.rpc.FileServiceAsync;
@@ -45,7 +45,7 @@ public class CommandSyncer implements SaveRequestedEventHandler {
 
 		@Override
 		public void onSuccess(UpdateResult result) {
-			eventBus.fireEvent(new InfoEvent("File saved properly."));
+			eventBus.fireEvent(new FileSavedEvent());
 		}
 	}
 }

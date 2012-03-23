@@ -3,6 +3,7 @@ package com.dacklabs.spookyaction.client.main;
 import com.dacklabs.spookyaction.client.editor.Editor;
 import com.dacklabs.spookyaction.client.fileselector.FileSelector;
 import com.dacklabs.spookyaction.client.notifications.NotificationSystem;
+import com.dacklabs.spookyaction.client.notifications.SyncStatus;
 import com.dacklabs.spookyaction.client.stats.StatsViewer;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -22,14 +23,16 @@ public class SpookyActionView extends Composite implements SpookyAction.Display 
 	@UiField(provided = true) final Editor editor;
 	@UiField(provided = true) final StatsViewer stats;
 	@UiField(provided = true) final NotificationSystem notificationSystem;
+	@UiField(provided = true) final SyncStatus syncStatus;
 
 	@Inject
 	public SpookyActionView(FileSelector fileSelector, Editor editor, StatsViewer stats,
-	    NotificationSystem notificationSystem) {
+	    NotificationSystem notificationSystem, SyncStatus syncStatus) {
 		this.fileSelector = fileSelector;
 		this.editor = editor;
 		this.stats = stats;
 		this.notificationSystem = notificationSystem;
+		this.syncStatus = syncStatus;
 
 		initWidget(uiBinder.createAndBindUi(this));
 	}

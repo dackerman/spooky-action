@@ -2,7 +2,6 @@ package com.dacklabs.spookyaction.client.fileselector;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.InputElement;
-import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -19,7 +18,6 @@ public class FileSelectorView extends Composite implements FileSelector.Display 
 
 	@UiField InputElement pathSelector;
 	@UiField Button submitButton;
-	@UiField SpanElement loadingText;
 
 	public FileSelectorView() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -33,15 +31,5 @@ public class FileSelectorView extends Composite implements FileSelector.Display 
 	@Override
 	public void onFileRequested(ClickHandler clickHandler) {
 		submitButton.addClickHandler(clickHandler);
-	}
-
-	@Override
-	public void showLoadingMessage() {
-		loadingText.setAttribute("style", "display:inherit");
-	}
-
-	@Override
-	public void hideLoadingMessage() {
-		loadingText.setAttribute("style", "display:none");
 	}
 }
