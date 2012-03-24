@@ -1,7 +1,6 @@
-war/WEB-INF/classes/
-war/WEB-INF/deploy/
-war/spooky_action/
 .gwt/
-.settings/
 test-classes/
 gwt-unitCache/
+src/main/webapp/WEB-INF/classes/
+src/main/webapp/WEB-INF/deploy/
+src/main/webapp/spooky_action/

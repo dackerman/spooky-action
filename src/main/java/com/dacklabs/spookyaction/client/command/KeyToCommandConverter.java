@@ -7,6 +7,7 @@ import com.dacklabs.spookyaction.shared.EditingSurface;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyEvent;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.shared.EventBus;
@@ -40,7 +41,7 @@ public class KeyToCommandConverter implements EditorEventHandler {
 	@Override
 	public void onKeyPress(int lineNumber, int cursorPosition, KeyPressEvent event) {
 		char charCode = event.getCharCode();
-		if (nonLetter(charCode)) {
+		if (!typeableCharacter(charCode)) {
 			return;
 		}
 
@@ -51,11 +52,12 @@ public class KeyToCommandConverter implements EditorEventHandler {
 		builder.onLine(lineNumber);
 		builder.withData(String.valueOf(charCode));
 
-		eventBus.fireEvent(new CommandEvent(builder.build()));
+		fireCommandEvent(event, builder);
 	}
 
-	private boolean nonLetter(char charCode) {
-		if (charCode == '\r') {
+	private boolean typeableCharacter(char charCode) {
+		// upper & lower case, numbers, special characters, and space.
+		if (charCode >= ' ' && charCode <= '~') {
 			return true;
 		} else {
 			return false;
@@ -64,6 +66,23 @@ public class KeyToCommandConverter implements EditorEventHandler {
 
 	@Override
 	public void onKeyUp(int lineNumber, int cursorPosition, KeyUpEvent event) {
+		Command.Builder builder = Command.builder();
+
+		switch (event.getNativeKeyCode()) {
+
+		case KeyCodes.KEY_BACKSPACE:
+			if (cursorPosition <= 0) {
+				return;
+			}
+			event.stopPropagation();
+			builder.withOffset(cursorPosition);
+			builder.onLine(lineNumber);
+			builder.ofType(CommandType.BACKSPACE);
+			event.preventDefault();
+			event.stopPropagation();
+			fireCommandEvent(event, builder);
+			return;
+		}
 	}
 
 	@Override
@@ -72,25 +91,21 @@ public class KeyToCommandConverter implements EditorEventHandler {
 
 		switch (event.getNativeKeyCode()) {
 
-		case KeyCodes.KEY_BACKSPACE:
-			if (cursorPosition < -1) {
-				return;
-			}
-			builder.withOffset(cursorPosition);
-			builder.onLine(lineNumber);
-			builder.ofType(CommandType.BACKSPACE);
-			break;
-
 		case KeyCodes.KEY_ENTER:
 			builder.withOffset(cursorPosition);
 			builder.onLine(lineNumber);
 			builder.ofType(CommandType.NEWLINE);
-			break;
-
-		default:
+			fireCommandEvent(event, builder);
 			return;
 		}
+	}
 
+	/**
+	 * Fires a command event and prevents any other events from propagating.
+	 */
+	private void fireCommandEvent(KeyEvent<?> event, Command.Builder builder) {
+		event.stopPropagation();
+		event.preventDefault();
 		eventBus.fireEvent(new CommandEvent(builder.build()));
 	}
 }

@@ -26,7 +26,7 @@ import com.google.inject.Provider;
  * The main editor window. Displays the file in a text area and then listens for events on it to
  * send back changes to the server.
  * 
- * @author "Count Dracula (david.w.ackerman@gmail.com)"
+ * @author "David Ackerman (david.w.ackerman@gmail.com)"
  */
 public class Editor implements IsWidget, EditingSurface, LineBasedEditor, EditorEventHandler {
 
@@ -190,7 +190,7 @@ public class Editor implements IsWidget, EditingSurface, LineBasedEditor, Editor
 			uiLines.get(lineNumber - 1).setCursor(-1);
 		}
 		// Wrapping from end of line to next line
-		else if (event.isRightArrow() && cursorPosition > currentLineLength && lineNumber < uiLines.size() - 1) {
+		else if (event.isRightArrow() && cursorPosition >= currentLineLength && lineNumber < uiLines.size() - 1) {
 			uiLines.get(lineNumber + 1).setCursor(0);
 		}
 		// Going up lines on same column

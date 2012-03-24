@@ -44,7 +44,7 @@ public class CommandExecutorTest {
 	@Test
 	public void testBackspaceCommandRemovesACharacter() {
 		editingSurface.setContent("Bill Brasky was a wimp");
-		sendCommand(new Command(0, 11, CommandType.BACKSPACE, null, 11));
+		sendCommand(new Command(0, 12, CommandType.BACKSPACE, null, 11));
 		assertEquals("Bill Brasky", editingSurface.getLine(0));
 	}
 

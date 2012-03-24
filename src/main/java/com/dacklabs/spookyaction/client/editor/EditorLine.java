@@ -89,7 +89,6 @@ public class EditorLine implements IsWidget, KeyPressHandler, KeyUpHandler, KeyD
 		for (EditorEventHandler handler : handlers) {
 			handler.onClick(lineNumber, display.getCursorPos(), event);
 		}
-		event.preventDefault();
 	}
 
 	@Override
@@ -97,7 +96,6 @@ public class EditorLine implements IsWidget, KeyPressHandler, KeyUpHandler, KeyD
 		for (EditorEventHandler handler : handlers) {
 			handler.onKeyUp(lineNumber, display.getCursorPos(), event);
 		}
-		event.preventDefault();
 	}
 
 	@Override
@@ -112,7 +110,6 @@ public class EditorLine implements IsWidget, KeyPressHandler, KeyUpHandler, KeyD
 		for (EditorEventHandler handler : handlers) {
 			handler.onKeyPress(lineNumber, display.getCursorPos(), event);
 		}
-		event.preventDefault();
 		incrementCursor();
 	}
 
