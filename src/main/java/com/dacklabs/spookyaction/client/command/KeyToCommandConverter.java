@@ -75,7 +75,7 @@ public class KeyToCommandConverter implements EditorEventHandler {
 				return;
 			}
 			event.stopPropagation();
-			builder.withOffset(cursorPosition);
+			builder.withOffset(cursorPosition + 1); // after key up, the cursor has already moved.
 			builder.onLine(lineNumber);
 			builder.ofType(CommandType.BACKSPACE);
 			event.preventDefault();

@@ -4,3 +4,4 @@ gwt-unitCache/
 src/main/webapp/WEB-INF/classes/
 src/main/webapp/WEB-INF/deploy/
 src/main/webapp/spooky_action/
+target/
