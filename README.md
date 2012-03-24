@@ -14,7 +14,12 @@ A web application to allow for asynchronous editing of files on the local file s
 
 ### BUGS
 
-* 
+* None currently
+
+
+### FIXED BUGS
+
+* **[FIXED]** Make hitting <spacebar> not scroll the screen
 
 
 ### POSSIBLE REFACTORING
@@ -33,8 +38,3 @@ A web application to allow for asynchronous editing of files on the local file s
 * <del>When user clicks save, send list of commands to backend</del>
 * <del>Show status of saving</del>
 * <del>Make carat blink</del>
-
-
-### FIXED BUGS
-
-* **[FIXED]** Make hitting <spacebar> not scroll the screen
