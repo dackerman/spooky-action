@@ -6,6 +6,7 @@ import com.dacklabs.spookyaction.shared.Command.CommandType;
 import com.dacklabs.spookyaction.shared.EditingSurface;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.shared.EventBus;
@@ -39,6 +40,9 @@ public class KeyToCommandConverter implements EditorEventHandler {
 	@Override
 	public void onKeyPress(int lineNumber, int cursorPosition, KeyPressEvent event) {
 		char charCode = event.getCharCode();
+		if (nonLetter(charCode)) {
+			return;
+		}
 
 		Command.Builder builder = Command.builder();
 		builder.ofType(CommandType.KEY);
@@ -50,19 +54,37 @@ public class KeyToCommandConverter implements EditorEventHandler {
 		eventBus.fireEvent(new CommandEvent(builder.build()));
 	}
 
+	private boolean nonLetter(char charCode) {
+		if (charCode == '\r') {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	@Override
 	public void onKeyUp(int lineNumber, int cursorPosition, KeyUpEvent event) {
+	}
+
+	@Override
+	public void onKeyDown(int lineNumber, int cursorPosition, KeyDownEvent event) {
 		Command.Builder builder = Command.builder();
 
 		switch (event.getNativeKeyCode()) {
 
 		case KeyCodes.KEY_BACKSPACE:
-			if (cursorPosition < 0) {
+			if (cursorPosition < -1) {
 				return;
 			}
 			builder.withOffset(cursorPosition);
 			builder.onLine(lineNumber);
 			builder.ofType(CommandType.BACKSPACE);
+			break;
+
+		case KeyCodes.KEY_ENTER:
+			builder.withOffset(cursorPosition);
+			builder.onLine(lineNumber);
+			builder.ofType(CommandType.NEWLINE);
 			break;
 
 		default:

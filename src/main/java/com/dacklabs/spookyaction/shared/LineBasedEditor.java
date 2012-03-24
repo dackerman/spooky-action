@@ -16,4 +16,14 @@ public interface LineBasedEditor {
 	 * Update a given line with a {@link StringBuffer}.
 	 */
 	void updateLine(int lineNumber, StringBuffer line);
+
+	/**
+	 * Inserts a line at the given line number, with the given data.
+	 */
+	void insertLine(int lineNumber, StringBuffer text);
+
+	/**
+	 * Removes a line at the given line number.
+	 */
+	void removeLine(int lineNumber);
 }

@@ -34,4 +34,14 @@ public class Lines implements Iterable<StringBuffer>, LineBasedEditor {
 		}
 		return out;
 	}
+
+	@Override
+	public void insertLine(int lineNumber, StringBuffer text) {
+		lines.add(lineNumber, text);
+	}
+
+	@Override
+	public void removeLine(int lineNumber) {
+		lines.remove(lineNumber);
+	}
 }

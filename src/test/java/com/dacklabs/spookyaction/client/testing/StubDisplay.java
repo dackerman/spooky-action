@@ -17,8 +17,13 @@ public class StubDisplay implements Display {
 	private final List<EditorLine> lines = Lists.newArrayList();
 
 	@Override
-	public void addLine(EditorLine line) {
-		lines.add(line);
+	public void addLine(int lineNumber, EditorLine line) {
+		lines.add(lineNumber, line);
+	}
+
+	@Override
+	public void removeLine(int lineNumber) {
+		lines.remove(lineNumber);
 	}
 
 	@Override

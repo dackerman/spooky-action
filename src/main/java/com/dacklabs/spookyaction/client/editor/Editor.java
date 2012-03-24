@@ -11,6 +11,10 @@ import com.dacklabs.spookyaction.client.main.Page;
 import com.dacklabs.spookyaction.shared.EditingSurface;
 import com.dacklabs.spookyaction.shared.File;
 import com.dacklabs.spookyaction.shared.LineBasedEditor;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
@@ -22,9 +26,9 @@ import com.google.inject.Provider;
  * The main editor window. Displays the file in a text area and then listens for events on it to
  * send back changes to the server.
  * 
- * @author "David Ackerman (david.w.ackerman@gmail.com)"
+ * @author "Count Dracula (david.w.ackerman@gmail.com)"
  */
-public class Editor implements IsWidget, EditingSurface, LineBasedEditor {
+public class Editor implements IsWidget, EditingSurface, LineBasedEditor, EditorEventHandler {
 
 	@ImplementedBy(EditorView.class)
 	public interface Display extends IsWidget {
@@ -32,7 +36,12 @@ public class Editor implements IsWidget, EditingSurface, LineBasedEditor {
 		/**
 		 * Creates a new line in the editor and returns it.
 		 */
-		void addLine(EditorLine line);
+		void addLine(int lineNumber, EditorLine newLine);
+
+		/**
+		 * Removes a EditorLine at the given line number.
+		 */
+		void removeLine(int lineNumber);
 
 		/**
 		 * Clears all lines from the editor.
@@ -99,13 +108,23 @@ public class Editor implements IsWidget, EditingSurface, LineBasedEditor {
 		String[] fileLines = file.getContent().split("\n");
 		int lineNumber = 0;
 		for (String line : fileLines) {
-			EditorLine newLine = lineFactory.get();
-			newLine.setText(line);
-			newLine.setLineNumber(lineNumber++);
-			newLine.addLineHandler(handler);
-			display.addLine(newLine);
-			uiLines.add(newLine);
+			addLine(lineNumber++, line);
 		}
+	}
+
+	private void addLine(int lineNumber, String line) {
+		EditorLine newLine = lineFactory.get();
+		newLine.setText(line);
+		newLine.setLineNumber(lineNumber);
+		newLine.addLineHandler(handler);
+		newLine.addLineHandler(this);
+		display.addLine(lineNumber, newLine);
+		uiLines.add(lineNumber, newLine);
+	}
+
+	private void deleteLine(int lineNumber) {
+		display.removeLine(lineNumber);
+		uiLines.remove(lineNumber);
 	}
 
 	private void unregisterHandlers() {
@@ -130,7 +149,65 @@ public class Editor implements IsWidget, EditingSurface, LineBasedEditor {
 		uiLines.get(lineNumber).setText(lineString);
 	}
 
+	@Override
+	public void insertLine(int lineNumber, StringBuffer text) {
+		addLine(lineNumber, text.toString());
+		resetLineNumbersAfter(lineNumber);
+	}
+
+	@Override
+	public void removeLine(int lineNumber) {
+		deleteLine(lineNumber);
+		resetLineNumbersAfter(lineNumber);
+	}
+
+	/**
+	 * Resets line numbers if we insert a line.
+	 */
+	private void resetLineNumbersAfter(int lineNumber) {
+		for (int i = lineNumber; i < uiLines.size(); i++) {
+			uiLines.get(i).setLineNumber(i);
+		}
+	}
+
 	public void setStyleName(String style) {
 		display.setStyleName(style);
+	}
+
+	@Override
+	public void onKeyPress(int lineNumber, int cursorPosition, KeyPressEvent event) {
+	}
+
+	@Override
+	public void onKeyUp(int lineNumber, int cursorPosition, KeyUpEvent event) {
+	}
+
+	@Override
+	public void onKeyDown(int lineNumber, int cursorPosition, KeyDownEvent event) {
+		int currentLineLength = uiLines.get(lineNumber).getText().length();
+		// Wrapping from beginning of line to previous line
+		if (event.isLeftArrow() && cursorPosition <= 0 && lineNumber > 0) {
+			uiLines.get(lineNumber - 1).setCursor(-1);
+		}
+		// Wrapping from end of line to next line
+		else if (event.isRightArrow() && cursorPosition > currentLineLength && lineNumber < uiLines.size() - 1) {
+			uiLines.get(lineNumber + 1).setCursor(0);
+		}
+		// Going up lines on same column
+		else if (event.isUpArrow() && lineNumber > 0) {
+			uiLines.get(lineNumber - 1).setCursor(cursorPosition);
+			event.stopPropagation();
+			event.preventDefault();
+		}
+		// Going down lines on same column
+		else if (event.isDownArrow() && lineNumber < uiLines.size() - 1) {
+			uiLines.get(lineNumber + 1).setCursor(cursorPosition);
+			event.stopPropagation();
+			event.preventDefault();
+		}
+	}
+
+	@Override
+	public void onClick(int lineNumber, int cursorPosition, ClickEvent event) {
 	}
 }

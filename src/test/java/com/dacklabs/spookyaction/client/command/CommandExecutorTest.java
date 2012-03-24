@@ -48,6 +48,34 @@ public class CommandExecutorTest {
 		assertEquals("Bill Brasky", editingSurface.getLine(0));
 	}
 
+	@Test
+	public void testBackspaceCommandConcatenatesWithPreviousLineIfAtBeginningOfLine() {
+		editingSurface.setContent("lorem ", "ipsum");
+		sendCommand(new Command(1, -1, CommandType.BACKSPACE, null, 1));
+		assertLines("lorem ipsum");
+	}
+
+	@Test
+	public void testEnterKeyCreatesANewLineAndSplitsTheExistingOneAtTheCursorPosition() {
+		editingSurface.setContent("extravaganza", "superfluous", "ambidexterous");
+		sendCommand(new Command(1, 5, CommandType.NEWLINE, null, 1));
+		assertLines("extravaganza", "super", "fluous", "ambidexterous");
+	}
+
+	@Test
+	public void testHittingEnterTwiceMakesTwoNewlines() {
+		editingSurface.setContent("extravaganza", "superfluous", "ambidexterous");
+		sendCommand(new Command(2, 4, CommandType.NEWLINE, null, 1));
+		sendCommand(new Command(3, 0, CommandType.NEWLINE, null, 1));
+		assertLines("extravaganza", "superfluous", "ambi", "", "dexterous");
+	}
+
+	private void assertLines(String... expectedLines) {
+		for (int i = 0; i < expectedLines.length; i++) {
+			assertEquals(expectedLines[i], editingSurface.getLine(i));
+		}
+	}
+
 	private void assertEquals(String string, StringBuffer line) {
 		Assert.assertEquals(string, line.toString());
 	}

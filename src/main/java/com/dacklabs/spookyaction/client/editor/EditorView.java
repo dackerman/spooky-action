@@ -32,8 +32,13 @@ public class EditorView extends Composite implements Editor.Display {
 	}
 
 	@Override
-	public void addLine(EditorLine line) {
-		editorPanel.add(line);
+	public void addLine(int lineNumber, EditorLine line) {
+		editorPanel.insert(line, lineNumber);
+	}
+
+	@Override
+	public void removeLine(int lineNumber) {
+		editorPanel.remove(lineNumber);
 	}
 
 	@Override
@@ -44,6 +49,7 @@ public class EditorView extends Composite implements Editor.Display {
 
 	@Override
 	public void showLoading(String path) {
+		editorPanel.clear();
 		loadingImage.setVisible(true);
 	}
 }

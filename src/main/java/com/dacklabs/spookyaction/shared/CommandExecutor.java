@@ -16,13 +16,28 @@ public class CommandExecutor {
 			switch (command.getType()) {
 			case KEY:
 				line.insert(command.getOffset(), command.getData());
+				editingSurface.updateLine(lineNumber, line);
 				break;
 			case BACKSPACE:
-				line.deleteCharAt(command.getOffset());
+				if (command.getOffset() < 1) {
+					if (lineNumber > 0) {
+						StringBuffer previousLine = editingSurface.getLine(lineNumber - 1);
+						previousLine.append(line);
+						editingSurface.updateLine(lineNumber - 1, previousLine);
+						editingSurface.removeLine(lineNumber);
+					}
+				} else {
+					line.deleteCharAt(command.getOffset() - 1);
+					editingSurface.updateLine(lineNumber, line);
+				}
+				break;
+			case NEWLINE:
+				String afterCursor = line.substring(command.getOffset());
+				line.delete(command.getOffset(), line.length());
+				editingSurface.insertLine(lineNumber + 1, new StringBuffer(afterCursor));
+				editingSurface.updateLine(lineNumber, line);
 				break;
 			}
 		}
-
-		editingSurface.updateLine(lineNumber, line);
 	}
 }

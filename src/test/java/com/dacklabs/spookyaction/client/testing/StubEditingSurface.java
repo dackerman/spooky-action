@@ -30,4 +30,14 @@ public class StubEditingSurface implements EditingSurface, LineBasedEditor {
 	@Override
 	public void setEditorEventHandler(EditorEventHandler handler) {
 	}
+
+	@Override
+	public void insertLine(int lineNumber, StringBuffer text) {
+		content.add(lineNumber, text);
+	}
+
+	@Override
+	public void removeLine(int lineNumber) {
+		content.remove(lineNumber);
+	}
 }

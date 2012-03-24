@@ -20,6 +20,8 @@ public class SpookyAction implements IsWidget, CommandEventHandler {
 	@ImplementedBy(SpookyActionView.class)
 	public interface Display extends IsWidget {
 		Editor getEditor();
+
+		void setFocusOnTextBox();
 	}
 
 	@Inject
@@ -32,6 +34,7 @@ public class SpookyAction implements IsWidget, CommandEventHandler {
 
 	public void start() {
 		converter.setEditor(display.getEditor());
+		display.setFocusOnTextBox();
 	}
 
 	@Override

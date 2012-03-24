@@ -6,8 +6,11 @@ import java.util.List;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.dom.client.HasKeyDownHandlers;
 import com.google.gwt.event.dom.client.HasKeyPressHandlers;
 import com.google.gwt.event.dom.client.HasKeyUpHandlers;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
@@ -23,16 +26,19 @@ import com.google.inject.Inject;
  * 
  * @author "David Ackerman (david.w.ackerman@gmail.com)"
  */
-public class EditorLine implements IsWidget, KeyPressHandler, KeyUpHandler, ClickHandler {
+public class EditorLine implements IsWidget, KeyPressHandler, KeyUpHandler, KeyDownHandler, ClickHandler {
 
 	private final Display display;
 
 	@ImplementedBy(EditorLineView.class)
-	public interface Display extends IsWidget, HasKeyUpHandlers, HasKeyPressHandlers, HasClickHandlers, HasHTML {
+	public interface Display extends IsWidget, HasKeyUpHandlers, HasKeyDownHandlers, HasKeyPressHandlers,
+	    HasClickHandlers, HasHTML {
 
 		int getCursorPos();
 
 		void setCursorPos(int pos);
+
+		void setFocus(boolean focused);
 	}
 
 	private final List<EditorEventHandler> handlers = new ArrayList<EditorEventHandler>();
@@ -45,6 +51,7 @@ public class EditorLine implements IsWidget, KeyPressHandler, KeyUpHandler, Clic
 		this.display = display;
 
 		display.addKeyPressHandler(this);
+		display.addKeyDownHandler(this);
 		display.addKeyUpHandler(this);
 		display.addClickHandler(this);
 	}
@@ -94,6 +101,13 @@ public class EditorLine implements IsWidget, KeyPressHandler, KeyUpHandler, Clic
 	}
 
 	@Override
+	public void onKeyDown(KeyDownEvent event) {
+		for (EditorEventHandler handler : handlers) {
+			handler.onKeyDown(lineNumber, display.getCursorPos(), event);
+		}
+	}
+
+	@Override
 	public void onKeyPress(KeyPressEvent event) {
 		for (EditorEventHandler handler : handlers) {
 			handler.onKeyPress(lineNumber, display.getCursorPos(), event);
@@ -103,10 +117,22 @@ public class EditorLine implements IsWidget, KeyPressHandler, KeyUpHandler, Clic
 	}
 
 	public void setCursor(int offset) {
-		display.setCursorPos(offset);
+		int position = offset;
+		if (position < 0) {
+			position = rawText.length() + position;
+		}
+		display.setCursorPos(clamp(position, 0, rawText.length()));
+		display.setFocus(true);
 	}
 
 	private void incrementCursor() {
-		display.setCursorPos(display.getCursorPos() + 1);
+		display.setCursorPos(clamp(display.getCursorPos() + 1, 0, rawText.length()));
+	}
+
+	/**
+	 * Returns the given value, which is guaranteed not to go beyond the given bounds, inclusive.
+	 */
+	private int clamp(int value, int lowerBound, int upperBound) {
+		return Math.min(Math.max(value, lowerBound), upperBound);
 	}
 }

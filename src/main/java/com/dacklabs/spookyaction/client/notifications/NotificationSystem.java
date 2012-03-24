@@ -4,6 +4,9 @@ import com.dacklabs.spookyaction.client.events.ErrorEvent;
 import com.dacklabs.spookyaction.client.events.ErrorEventHandler;
 import com.dacklabs.spookyaction.client.events.InfoEvent;
 import com.dacklabs.spookyaction.client.events.InfoEventHandler;
+import com.dacklabs.spookyaction.client.events.OpenFileEvent;
+import com.dacklabs.spookyaction.client.events.OpenFileEventHandler;
+import com.dacklabs.spookyaction.shared.File;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -13,7 +16,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.ImplementedBy;
 import com.google.inject.Inject;
 
-public class NotificationSystem implements ErrorEventHandler, InfoEventHandler, IsWidget {
+public class NotificationSystem implements ErrorEventHandler, InfoEventHandler, OpenFileEventHandler, IsWidget {
 
 	private static final String GENERIC_ERROR = "An error occurred. Sorry, that's all the information I have.";
 
@@ -70,6 +73,7 @@ public class NotificationSystem implements ErrorEventHandler, InfoEventHandler, 
 
 		eventBus.addHandler(ErrorEvent.TYPE, this);
 		eventBus.addHandler(InfoEvent.TYPE, this);
+		eventBus.addHandler(OpenFileEvent.TYPE, this);
 
 		display.closeButton().addClickHandler(new OnCloseHandler());
 		display.detailsButton().addClickHandler(new OnDetailsHandler());
@@ -126,5 +130,10 @@ public class NotificationSystem implements ErrorEventHandler, InfoEventHandler, 
 	@Override
 	public Widget asWidget() {
 		return display.asWidget();
+	}
+
+	@Override
+	public void onFileRecieved(File file) {
+		display.clear();
 	}
 }

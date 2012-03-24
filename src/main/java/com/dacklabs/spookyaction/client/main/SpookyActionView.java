@@ -38,4 +38,9 @@ public class SpookyActionView extends Composite implements SpookyAction.Display 
 	public Editor getEditor() {
 		return editor;
 	}
+
+	@Override
+	public void setFocusOnTextBox() {
+		fileSelector.focus();
+	}
 }

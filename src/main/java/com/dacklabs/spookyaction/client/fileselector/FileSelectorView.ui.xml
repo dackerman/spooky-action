@@ -4,8 +4,8 @@
 	<ui:style>
 		
 	</ui:style>
-	<g:HTMLPanel>
-      <input type="text" ui:field="pathSelector" />
+	<g:HTMLPanel ui:field="container">
+      <g:TextBox ui:field="pathSelector" />
       <g:Button text="Edit" ui:field="submitButton"/>
 	</g:HTMLPanel>
 </ui:UiBinder> 
