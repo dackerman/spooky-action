@@ -3,6 +3,7 @@ A web application to allow for asynchronous editing of files on the local file s
 
 ### TODO
 
+1. Add assembly plugin for maven so the whole webapp can be deployed as a single executable jar.
 1. Move lines with Alt+Up and Alt+Down
 1. Show suggestions as-you-type for a file
 1. Before sending list of commands over the wire, compress them.

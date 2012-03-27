@@ -44,4 +44,19 @@ public class Lines implements Iterable<StringBuffer>, LineBasedEditor {
 	public void removeLine(int lineNumber) {
 		lines.remove(lineNumber);
 	}
+
+	@Override
+	public void swapLines(int starting, int ending) {
+		if (inRange(starting) && inRange(ending)) {
+			StringBuffer startingSb = lines.get(starting);
+			StringBuffer endingSb = lines.get(ending);
+
+			lines.set(ending, startingSb);
+			lines.set(starting, endingSb);
+		}
+	}
+
+	private boolean inRange(int value) {
+		return value >= 0 && value < lines.size();
+	}
 }

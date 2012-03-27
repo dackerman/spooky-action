@@ -39,5 +39,19 @@ public class CommandExecutor {
 				break;
 			}
 		}
+
+		switch (command.getType()) {
+		case MOVE_LINE:
+			int repeated = command.getRepeated();
+			if (repeated > 0) {
+				for (int i = 0; i < repeated; i++) {
+					editingSurface.swapLines(lineNumber + i, lineNumber + i + 1);
+				}
+			} else {
+				for (int i = 0; i > repeated; i--) {
+					editingSurface.swapLines(lineNumber + i, lineNumber + i - 1);
+				}
+			}
+		}
 	}
 }

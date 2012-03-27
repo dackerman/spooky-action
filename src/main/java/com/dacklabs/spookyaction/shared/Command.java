@@ -17,7 +17,7 @@ public class Command implements IsSerializable {
 	private int line;
 
 	public enum CommandType {
-		BACKSPACE, KEY, CLICK, NEWLINE
+		BACKSPACE, KEY, CLICK, NEWLINE, MOVE_LINE
 	}
 
 	@SuppressWarnings("unused")

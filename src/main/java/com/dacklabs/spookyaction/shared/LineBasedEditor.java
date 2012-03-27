@@ -26,4 +26,9 @@ public interface LineBasedEditor {
 	 * Removes a line at the given line number.
 	 */
 	void removeLine(int lineNumber);
+
+	/**
+	 * Swap two lines in the editor.
+	 */
+	void swapLines(int starting, int ending);
 }

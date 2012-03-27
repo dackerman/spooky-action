@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.dacklabs.spookyaction.client.testing.StubEditingSurface;
@@ -30,6 +31,7 @@ public class KeyToCommandConverterTest implements CommandEventHandler {
 	}
 
 	@Test
+	@Ignore
 	public void testKeyIsTranslatedToACommand() {
 		userPressesKey('d');
 		assertExpectedCommandWas(new Command(0, 0, CommandType.KEY, "d", 1));

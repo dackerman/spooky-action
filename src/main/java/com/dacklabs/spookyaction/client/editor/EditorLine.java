@@ -9,6 +9,7 @@ import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.HasKeyDownHandlers;
 import com.google.gwt.event.dom.client.HasKeyPressHandlers;
 import com.google.gwt.event.dom.client.HasKeyUpHandlers;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyPressEvent;
@@ -102,6 +103,9 @@ public class EditorLine implements IsWidget, KeyPressHandler, KeyUpHandler, KeyD
 	public void onKeyDown(KeyDownEvent event) {
 		for (EditorEventHandler handler : handlers) {
 			handler.onKeyDown(lineNumber, display.getCursorPos(), event);
+		}
+		if (event.getNativeKeyCode() == KeyCodes.KEY_BACKSPACE) {
+			display.setCursorPos(display.getCursorPos() - 1);
 		}
 	}
 

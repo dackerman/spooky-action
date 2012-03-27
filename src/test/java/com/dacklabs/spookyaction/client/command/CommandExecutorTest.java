@@ -1,5 +1,6 @@
 package com.dacklabs.spookyaction.client.command;
 
+import static org.junit.Assert.assertArrayEquals;
 import junit.framework.Assert;
 
 import org.junit.Before;
@@ -9,6 +10,7 @@ import com.dacklabs.spookyaction.client.testing.StubEditingSurface;
 import com.dacklabs.spookyaction.shared.Command;
 import com.dacklabs.spookyaction.shared.Command.CommandType;
 import com.dacklabs.spookyaction.shared.CommandExecutor;
+import com.google.common.collect.Lists;
 
 public class CommandExecutorTest {
 
@@ -51,7 +53,7 @@ public class CommandExecutorTest {
 	@Test
 	public void testBackspaceCommandConcatenatesWithPreviousLineIfAtBeginningOfLine() {
 		editingSurface.setContent("lorem ", "ipsum");
-		sendCommand(new Command(1, -1, CommandType.BACKSPACE, null, 1));
+		sendCommand(new Command(1, 0, CommandType.BACKSPACE, null, 1));
 		assertLines("lorem ipsum");
 	}
 
@@ -70,10 +72,39 @@ public class CommandExecutorTest {
 		assertLines("extravaganza", "superfluous", "ambi", "", "dexterous");
 	}
 
+	@Test
+	public void testMoveCommandSwapsLineBelow() {
+		editingSurface.setContent("line one", "line two", "line three");
+		sendCommand(new Command(1, 0, CommandType.MOVE_LINE, null, 1));
+		assertLines("line one", "line three", "line two");
+	}
+
+	@Test
+	public void testMoveCommandSwapsTwoLinesBelow() {
+		editingSurface.setContent("line one", "line two", "line three", "line four");
+		sendCommand(new Command(1, 0, CommandType.MOVE_LINE, null, 2));
+		assertLines("line one", "line three", "line four", "line two");
+	}
+
+	@Test
+	public void testMoveCommandSwapsNegativeLines() {
+		editingSurface.setContent("one", "two", "three");
+		sendCommand(new Command(1, 0, CommandType.MOVE_LINE, null, -1));
+		assertLines("two", "one", "three");
+	}
+
+	@Test
+	public void testMoveCommandSwapsMultipleNegativeLines() {
+		editingSurface.setContent("one", "two", "three", "seven", "eleven", "schfifty-five");
+		sendCommand(new Command(5, 0, CommandType.MOVE_LINE, null, -3));
+		assertLines("one", "two", "schfifty-five", "three", "seven", "eleven");
+	}
+
 	private void assertLines(String... expectedLines) {
-		for (int i = 0; i < expectedLines.length; i++) {
-			assertEquals(expectedLines[i], editingSurface.getLine(i));
-		}
+		String[] actualLines = editingSurface.linesAsArray();
+		assertArrayEquals(
+		    String.format("expected: %s actual: %s", Lists.newArrayList(expectedLines), Lists.newArrayList(actualLines)),
+		    expectedLines, actualLines);
 	}
 
 	private void assertEquals(String string, StringBuffer line) {

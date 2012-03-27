@@ -12,6 +12,7 @@ import com.dacklabs.spookyaction.shared.EditingSurface;
 import com.dacklabs.spookyaction.shared.File;
 import com.dacklabs.spookyaction.shared.LineBasedEditor;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyUpEvent;
@@ -161,6 +162,22 @@ public class Editor implements IsWidget, EditingSurface, LineBasedEditor, Editor
 		resetLineNumbersAfter(lineNumber);
 	}
 
+	@Override
+	public void swapLines(int starting, int ending) {
+		if (inRange(starting) && inRange(ending)) {
+			EditorLine startingLine = uiLines.get(starting);
+			EditorLine endingLine = uiLines.get(ending);
+
+			String endingText = endingLine.getText();
+			endingLine.setText(startingLine.getText());
+			startingLine.setText(endingText);
+		}
+	}
+
+	private boolean inRange(int value) {
+		return value >= 0 && value < uiLines.size();
+	}
+
 	/**
 	 * Resets line numbers if we insert a line.
 	 */
@@ -180,10 +197,17 @@ public class Editor implements IsWidget, EditingSurface, LineBasedEditor, Editor
 
 	@Override
 	public void onKeyUp(int lineNumber, int cursorPosition, KeyUpEvent event) {
+		if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER && lineNumber < uiLines.size() - 1) {
+			uiLines.get(lineNumber + 1).setCursor(0);
+		}
 	}
 
 	@Override
 	public void onKeyDown(int lineNumber, int cursorPosition, KeyDownEvent event) {
+		handleArrowKeyNavigation(lineNumber, cursorPosition, event);
+	}
+
+	private void handleArrowKeyNavigation(int lineNumber, int cursorPosition, KeyDownEvent event) {
 		int currentLineLength = uiLines.get(lineNumber).getText().length();
 		// Wrapping from beginning of line to previous line
 		if (event.isLeftArrow() && cursorPosition <= 0 && lineNumber > 0) {

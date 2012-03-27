@@ -1,5 +1,6 @@
-#Fri Mar 23 16:54:54 PDT 2012
+#Sun Mar 25 11:21:18 PDT 2012
 eclipse.preferences.version=1
 jarsExcludedFromWebInfLib=
+lastWarOutDir=/home/david/code/spooky-action/target/spooky-action-1.0-SNAPSHOT
 warSrcDir=src/main/webapp
-warSrcDirIsOutput=true
+warSrcDirIsOutput=false

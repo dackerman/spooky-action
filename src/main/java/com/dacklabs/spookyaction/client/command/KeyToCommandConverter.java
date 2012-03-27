@@ -66,23 +66,6 @@ public class KeyToCommandConverter implements EditorEventHandler {
 
 	@Override
 	public void onKeyUp(int lineNumber, int cursorPosition, KeyUpEvent event) {
-		Command.Builder builder = Command.builder();
-
-		switch (event.getNativeKeyCode()) {
-
-		case KeyCodes.KEY_BACKSPACE:
-			if (cursorPosition <= 0) {
-				return;
-			}
-			event.stopPropagation();
-			builder.withOffset(cursorPosition + 1); // after key up, the cursor has already moved.
-			builder.onLine(lineNumber);
-			builder.ofType(CommandType.BACKSPACE);
-			event.preventDefault();
-			event.stopPropagation();
-			fireCommandEvent(event, builder);
-			return;
-		}
 	}
 
 	@Override
@@ -97,6 +80,33 @@ public class KeyToCommandConverter implements EditorEventHandler {
 			builder.ofType(CommandType.NEWLINE);
 			fireCommandEvent(event, builder);
 			return;
+
+		case KeyCodes.KEY_BACKSPACE:
+			builder.withOffset(cursorPosition);
+			builder.onLine(lineNumber);
+			builder.ofType(CommandType.BACKSPACE);
+			fireCommandEvent(event, builder);
+			return;
+
+		case KeyCodes.KEY_DOWN:
+			if (event.isAltKeyDown()) {
+				builder.withOffset(0);
+				builder.onLine(lineNumber);
+				builder.ofType(CommandType.MOVE_LINE);
+				builder.repeatedTimes(1);
+				fireCommandEvent(event, builder);
+				return;
+			}
+
+		case KeyCodes.KEY_UP:
+			if (event.isAltKeyDown()) {
+				builder.withOffset(0);
+				builder.onLine(lineNumber);
+				builder.ofType(CommandType.MOVE_LINE);
+				builder.repeatedTimes(-1);
+				fireCommandEvent(event, builder);
+				return;
+			}
 		}
 	}
 
