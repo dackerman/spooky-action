@@ -78,7 +78,7 @@ public class EditorLine implements IsWidget, KeyPressHandler, KeyUpHandler, KeyD
 		rawText = line;
 		int tmpCursor = display.getCursorPos();
 		display.setHTML(rawText);
-		display.setCursorPos(tmpCursor);
+		display.setCursorPos(Math.min(tmpCursor, rawText.length()));
 	}
 
 	public String getText() {
