@@ -17,7 +17,7 @@ public class CommandExecutor {
 			case KEY:
 				line.insert(command.getOffset(), command.getData());
 				editingSurface.updateLine(lineNumber, line);
-				return;
+				break;
 			case BACKSPACE:
 				if (command.getOffset() < 1) {
 					if (lineNumber > 0) {
@@ -30,13 +30,13 @@ public class CommandExecutor {
 					line.deleteCharAt(command.getOffset() - 1);
 					editingSurface.updateLine(lineNumber, line);
 				}
-				return;
+				break;
 			case NEWLINE:
 				String afterCursor = line.substring(command.getOffset());
 				line.delete(command.getOffset(), line.length());
 				editingSurface.insertLine(lineNumber + 1, new StringBuffer(afterCursor));
 				editingSurface.updateLine(lineNumber, line);
-				return;
+				break;
 			}
 		}
 

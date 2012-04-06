@@ -10,18 +10,17 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  */
 public class Command implements IsSerializable {
 
-	private int offset;
-	private CommandType type;
-	private String data;
-	private int repeated;
-	private int line;
+	protected int offset;
+	protected CommandType type;
+	protected String data;
+	protected int repeated;
+	protected int line;
 
 	public enum CommandType {
 		BACKSPACE, KEY, CLICK, NEWLINE, MOVE_LINE
 	}
 
-	@SuppressWarnings("unused")
-	private Command() {
+	protected Command() {
 	}
 
 	public Command(int line, int offset, CommandType type, String data, int repeated) {
@@ -30,6 +29,23 @@ public class Command implements IsSerializable {
 		this.type = type;
 		this.data = data;
 		this.repeated = repeated;
+	}
+
+	/**
+	 * Attempts to merge the given command into this one. Returns false if it can't be merged.
+	 */
+	public boolean merge(Command otherCommand) {
+		return false; // Only subclasses attempt optimizations
+	}
+
+	/**
+	 * Returns whether or not this command is a "no-op", meaning that it has no effect when applied to
+	 * a document. This might mean a key command with no data, or a backspace repeated 0 times.
+	 * <p>
+	 * This can happen if another command merges with this one and effectively cancels it out.
+	 */
+	public boolean isNoOp() {
+		return false;
 	}
 
 	/**
@@ -54,6 +70,22 @@ public class Command implements IsSerializable {
 		return type;
 	}
 
+	protected boolean typesMatch(CommandType type, Command other) {
+		return getType().equals(type) && other.getType().equals(type);
+	}
+
+	protected boolean areOnSameLine(Command other) {
+		return getLineNumber() == other.getLineNumber();
+	}
+
+	protected boolean haveSameOffset(Command other) {
+		return getOffset() == other.getOffset();
+	}
+
+	protected boolean haveSameData(Command other) {
+		return getData().equals(other.getData());
+	}
+
 	/**
 	 * The data included in the command.
 	 */
@@ -65,14 +97,20 @@ public class Command implements IsSerializable {
 		return repeated;
 	}
 
-	public static Command.Builder builder() {
-		return new Builder();
+	public static Command.Builder builder(CommandType type) {
+		return new Builder(type);
 	}
 
 	public static class Builder {
-		private Command command = newCommand();
+		private Command command;
 
-		private Builder() {
+		private Builder(CommandType type) {
+			if (type.equals(CommandType.KEY)) {
+				command = new KeyCommand(0, 0, type, "", 1);
+			} else {
+				command = newCommand();
+				command.type = type;
+			}
 		}
 
 		public Builder onLine(int line) {
@@ -82,11 +120,6 @@ public class Command implements IsSerializable {
 
 		public Builder withOffset(int offset) {
 			command.offset = offset;
-			return this;
-		}
-
-		public Builder ofType(CommandType type) {
-			command.type = type;
 			return this;
 		}
 
@@ -101,9 +134,7 @@ public class Command implements IsSerializable {
 		}
 
 		public Command build() {
-			Command builtCommand = command;
-			command = newCommand();
-			return builtCommand;
+			return command;
 		}
 
 		private Command newCommand() {

@@ -142,15 +142,15 @@ public class SaveButtonTest {
 	}
 
 	private Command basicBackspaceCommand() {
-		return Command.builder().ofType(CommandType.BACKSPACE).build();
+		return Command.builder(CommandType.BACKSPACE).build();
 	}
 
 	private Command commandWithData(String data) {
-		return Command.builder().withData(data).build();
+		return Command.builder(CommandType.KEY).withData(data).build();
 	}
 
 	private Command basicKeyCommand() {
-		return Command.builder().ofType(CommandType.KEY).build();
+		return Command.builder(CommandType.KEY).build();
 	}
 
 	private SaveButton createSaveButton() {

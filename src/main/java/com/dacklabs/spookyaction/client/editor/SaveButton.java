@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.dacklabs.spookyaction.client.command.CommandEvent;
 import com.dacklabs.spookyaction.client.command.CommandEventHandler;
+import com.dacklabs.spookyaction.client.command.CompressedCommands;
 import com.dacklabs.spookyaction.client.events.ErrorEvent;
 import com.dacklabs.spookyaction.client.events.OpenFileEvent;
 import com.dacklabs.spookyaction.client.events.OpenFileEventHandler;
@@ -66,7 +67,7 @@ public class SaveButton implements OpenFileEventHandler, CommandEventHandler, Cl
 	private final FileServiceAsync fileService;
 
 	private File file;
-	private ArrayList<Command> commands = new ArrayList<Command>();
+	private CompressedCommands commands = new CompressedCommands();
 	private final EventBus eventBus;
 
 	@Inject
@@ -87,8 +88,8 @@ public class SaveButton implements OpenFileEventHandler, CommandEventHandler, Cl
 		if (commands.isEmpty()) {
 			return;
 		}
-		ArrayList<Command> commandsToSave = commands;
-		commands = new ArrayList<Command>();
+		ArrayList<Command> commandsToSave = commands.compressedCommands();
+		commands = new CompressedCommands();
 		fileService.updateFile(file.getFilename(), commandsToSave, new UpdateFileCallback(commandsToSave));
 	}
 
@@ -125,7 +126,7 @@ public class SaveButton implements OpenFileEventHandler, CommandEventHandler, Cl
 		public void onFailure(Throwable caught) {
 			eventBus.fireEvent(new ErrorEvent("Failed to save the file to the server" + caught.getClass()));
 			for (int i = commandsToSave.size() - 1; i >= 0; i--) {
-				commands.add(0, commandsToSave.get(i));
+				commands.push(commandsToSave.get(i));
 			}
 			display.setRedText("Retry");
 			display.setEnabled(true);

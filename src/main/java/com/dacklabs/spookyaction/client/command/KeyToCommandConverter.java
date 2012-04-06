@@ -45,8 +45,7 @@ public class KeyToCommandConverter implements EditorEventHandler {
 			return;
 		}
 
-		Command.Builder builder = Command.builder();
-		builder.ofType(CommandType.KEY);
+		Command.Builder builder = Command.builder(CommandType.KEY);
 		builder.repeatedTimes(1);
 		builder.withOffset(cursorPosition);
 		builder.onLine(lineNumber);
@@ -70,29 +69,29 @@ public class KeyToCommandConverter implements EditorEventHandler {
 
 	@Override
 	public void onKeyDown(int lineNumber, int cursorPosition, KeyDownEvent event) {
-		Command.Builder builder = Command.builder();
 
+		Command.Builder builder;
 		switch (event.getNativeKeyCode()) {
 
 		case KeyCodes.KEY_ENTER:
+			builder = Command.builder(CommandType.NEWLINE);
 			builder.withOffset(cursorPosition);
 			builder.onLine(lineNumber);
-			builder.ofType(CommandType.NEWLINE);
 			fireCommandEvent(event, builder);
 			return;
 
 		case KeyCodes.KEY_BACKSPACE:
+			builder = Command.builder(CommandType.BACKSPACE);
 			builder.withOffset(cursorPosition);
 			builder.onLine(lineNumber);
-			builder.ofType(CommandType.BACKSPACE);
 			fireCommandEvent(event, builder);
 			return;
 
 		case KeyCodes.KEY_DOWN:
 			if (event.isAltKeyDown()) {
+				builder = Command.builder(CommandType.MOVE_LINE);
 				builder.withOffset(0);
 				builder.onLine(lineNumber);
-				builder.ofType(CommandType.MOVE_LINE);
 				builder.repeatedTimes(1);
 				fireCommandEvent(event, builder);
 				return;
@@ -100,9 +99,9 @@ public class KeyToCommandConverter implements EditorEventHandler {
 
 		case KeyCodes.KEY_UP:
 			if (event.isAltKeyDown()) {
+				builder = Command.builder(CommandType.MOVE_LINE);
 				builder.withOffset(0);
 				builder.onLine(lineNumber);
-				builder.ofType(CommandType.MOVE_LINE);
 				builder.repeatedTimes(-1);
 				fireCommandEvent(event, builder);
 				return;
